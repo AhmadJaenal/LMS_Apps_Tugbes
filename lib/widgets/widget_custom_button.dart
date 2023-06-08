@@ -43,10 +43,12 @@ class CustomButton extends StatelessWidget {
 class CustomButtonClass extends StatelessWidget {
   final String titleButton;
   final Function() onTap;
+  final bool isBig;
   const CustomButtonClass({
     super.key,
     required this.titleButton,
     required this.onTap,
+    this.isBig = false,
   });
 
   @override
@@ -54,13 +56,15 @@ class CustomButtonClass extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 140,
+        width: isBig ? double.infinity : 140,
+        height: isBig ? 48 : 42,
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: blueColor,
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               width: 24,

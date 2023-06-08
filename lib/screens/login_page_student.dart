@@ -40,17 +40,23 @@ class LoginPageStudent extends StatelessWidget {
                     color: secondaryColor.withOpacity(0.4),
                   ),
                   const SizedBox(height: 32),
-                  CustomTextfield(
-                    controller: nisController,
-                    titleTextfield: 'NIS',
-                    hintText: 'Enter your NIS',
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: margin),
+                    child: CustomTextfield(
+                      controller: nisController,
+                      titleTextfield: 'NIS',
+                      hintText: 'Enter your NIS',
+                    ),
                   ),
                   const SizedBox(height: 24),
-                  CustomTextfield(
-                    controller: passwordController,
-                    titleTextfield: 'Password',
-                    hintText: 'Enter your password',
-                    obsecured: true,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: margin),
+                    child: CustomTextfield(
+                      controller: passwordController,
+                      titleTextfield: 'Password',
+                      hintText: 'Enter your password',
+                      obsecured: true,
+                    ),
                   ),
                   const SizedBox(height: 32),
                   CustomButton(

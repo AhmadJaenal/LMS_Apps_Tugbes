@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
+import 'package:lms_app_tugbes/widgets/widget_textfield.dart';
+
+import '../models/list_class_models.dart';
 
 class Dashboard extends StatelessWidget {
-  const Dashboard({super.key});
+  Dashboard({super.key});
+
+  TextEditingController idClassController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +52,55 @@ class Dashboard extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               CustomButtonClass(
-                onTap: () {},
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          actions: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: whiteColor,
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(Icons.link,
+                                          color: primaryColor, weight: 24),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        'Add Class',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .copyWith(
+                                                color: primaryColor,
+                                                fontSize: 18,
+                                                fontWeight: semiBold),
+                                      )
+                                    ],
+                                  ),
+                                  CustomTextfield(
+                                    controller: idClassController,
+                                    hintText: 'Add link class',
+                                    titleTextfield: '',
+                                  ),
+                                  const SizedBox(height: 16),
+                                  CustomButtonClass(
+                                    isBig: true,
+                                    titleButton: 'Add class',
+                                    onTap: () {},
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      });
+                },
                 titleButton: 'Join Class',
               ),
               const SizedBox(height: 24),
@@ -56,35 +109,20 @@ class Dashboard extends StatelessWidget {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Container(
-                  child: Row(
-                    children: [
-                      CardClass(
-                        className: '12 IPA b',
-                        lessonName: 'Math',
+                  width: 300,
+                  height: 180,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 2,
+                    itemBuilder: (context, index) {
+                      return CardClass(
+                        className: 'RPL 2',
+                        teachersName: 'yati',
                         color: blueColor,
-                        teachersName: 'Yati S.Pd',
-                        theNumberOfStudent: 32,
-                        pattern: 'pattern_math.svg',
-                      ),
-                      const SizedBox(width: 16),
-                      CardClass(
-                        className: '12 IPA b',
-                        lessonName: 'Sosial',
-                        color: redColor,
-                        teachersName: 'Iwan S.Pd',
-                        theNumberOfStudent: 20,
-                        pattern: 'pattern_sosial.svg',
-                      ),
-                      const SizedBox(width: 16),
-                      CardClass(
-                        className: '12 IPA b',
-                        lessonName: 'English',
-                        color: yellowColor,
-                        teachersName: 'Wida S.Pd',
-                        theNumberOfStudent: 25,
-                        pattern: 'pattern_sosial.svg',
-                      ),
-                    ],
+                        lessonName: 'Math',
+                        theNumberOfStudent: 21,
+                      );
+                    },
                   ),
                 ),
               ),
