@@ -1,169 +1,256 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:lms_app_tugbes/animation/fade_animation.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
+import 'package:lms_app_tugbes/widgets/card_class.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
 import 'package:lms_app_tugbes/widgets/widget_textfield.dart';
 
-import '../models/list_class_models.dart';
-
-class Dashboard extends StatelessWidget {
+class Dashboard extends StatefulWidget {
   Dashboard({super.key});
 
+  @override
+  State<Dashboard> createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard>
+    with SingleTickerProviderStateMixin {
   TextEditingController idClassController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: whiteColor,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: margin),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 42),
-              Container(
-                width: double.infinity,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+    final mediaQueryOfWidth = MediaQuery.of(context).size.width;
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: whiteColor,
+        body: Stack(
+          children: [
+            FadeAnimation(
+              childWidget: Align(
+                  alignment: const Alignment(1, 4),
+                  child: SvgPicture.asset(
+                    'assets/pattern.svg',
+                    fit: BoxFit.cover,
+                  )),
+            ),
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 42),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: margin),
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Welcome back',
-                            style: Theme.of(context).textTheme.bodySmall),
-                        Text('Jonua',
-                            style: Theme.of(context).textTheme.bodyLarge),
+                        FadeAnimation(
+                          offsetX: -100,
+                          childWidget: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Welcome back',
+                                  style: Theme.of(context).textTheme.bodySmall),
+                              Text('Jonua',
+                                  style: Theme.of(context).textTheme.bodyLarge),
+                            ],
+                          ),
+                        ),
+                        FadeAnimation(
+                          offsetX: 100,
+                          childWidget: Container(
+                            width: 38,
+                            height: 38,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: blueColor,
+                            ),
+                            child: Icon(Icons.person_outline_rounded,
+                                color: whiteColor, size: 14, weight: 3),
+                          ),
+                        ),
                       ],
                     ),
-                    Container(
-                      width: 38,
-                      height: 38,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: blueColor,
+                  ),
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: margin),
+                    child: FadeAnimation(
+                      offsetX: -100,
+                      childWidget: CustomButtonClass(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  actions: <Widget>[
+                                    Container(
+                                      padding: const EdgeInsets.all(16),
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: whiteColor,
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Icon(Icons.link,
+                                                  color: primaryColor,
+                                                  weight: 24),
+                                              const SizedBox(width: 8),
+                                              Text(
+                                                'Add Class',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium!
+                                                    .copyWith(
+                                                        color: primaryColor,
+                                                        fontSize: 18,
+                                                        fontWeight: semiBold),
+                                              )
+                                            ],
+                                          ),
+                                          CustomTextfield(
+                                            controller: idClassController,
+                                            hintText: 'Add link class',
+                                            titleTextfield: '',
+                                          ),
+                                          const SizedBox(height: 16),
+                                          CustomButtonClass(
+                                            isBig: true,
+                                            titleButton: 'Join',
+                                            onTap: () {},
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              });
+                        },
+                        titleButton: 'Join Class',
                       ),
-                      child: Icon(Icons.person_outline_rounded,
-                          color: whiteColor, size: 14, weight: 3),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              CustomButtonClass(
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          actions: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.all(16),
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: whiteColor,
-                              ),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(Icons.link,
-                                          color: primaryColor, weight: 24),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        'Add Class',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .copyWith(
-                                                color: primaryColor,
-                                                fontSize: 18,
-                                                fontWeight: semiBold),
-                                      )
-                                    ],
-                                  ),
-                                  CustomTextfield(
-                                    controller: idClassController,
-                                    hintText: 'Add link class',
-                                    titleTextfield: '',
-                                  ),
-                                  const SizedBox(height: 16),
-                                  CustomButtonClass(
-                                    isBig: true,
-                                    titleButton: 'Add class',
-                                    onTap: () {},
-                                  ),
-                                ],
+                  ),
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: margin),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        FadeAnimation(
+                          offsetX: -100,
+                          childWidget: Text('Your Class',
+                              style: Theme.of(context).textTheme.titleLarge),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed('/list-page');
+                          },
+                          child: FadeAnimation(
+                            offsetX: 50,
+                            childWidget: Text(
+                              'View all',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(color: primaryColor),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Container(
+                      width: mediaQueryOfWidth,
+                      height: 180,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 5,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: index == 0
+                                ? const EdgeInsets.only(left: 24)
+                                : index == 4
+                                    ? const EdgeInsets.only(right: 24, left: 16)
+                                    : const EdgeInsets.only(left: 16),
+                            child: FadeAnimation(
+                              offsetX: 100,
+                              childWidget: CardClass(
+                                className: 'RPL 2',
+                                teachersName: 'yati',
+                                color: blueColor,
+                                lessonName: 'Math',
+                                theNumberOfStudent: 21,
+                                onTap: () {
+                                  Get.toNamed('/list-module-student');
+                                },
                               ),
                             ),
-                          ],
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: margin),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        FadeAnimation(
+                          offsetX: -50,
+                          childWidget: Text('Task',
+                              style: Theme.of(context).textTheme.titleLarge),
+                        ),
+                        FadeAnimation(
+                          offsetX: 50,
+                          childWidget: Text(
+                            'View all',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(color: primaryColor),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: margin),
+                    width: double.infinity,
+                    height: 400,
+                    child: ListView.builder(
+                      itemCount: 5,
+                      itemBuilder: (BuildContext context, index) {
+                        return Padding(
+                          padding: index == 0
+                              ? const EdgeInsets.only(top: 0)
+                              : const EdgeInsets.only(top: 16),
+                          child: FadeAnimation(
+                            offsetY: 200,
+                            childWidget: const CardTask(
+                              lessonName: 'Math',
+                              schedule: 'Modul 5',
+                              teachersName: 'Yati S.Pd',
+                              time: '09:00-11:00',
+                            ),
+                          ),
                         );
-                      });
-                },
-                titleButton: 'Join Class',
-              ),
-              const SizedBox(height: 24),
-              Text('Your Class', style: Theme.of(context).textTheme.titleLarge),
-              const SizedBox(height: 16),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Container(
-                  width: 300,
-                  height: 180,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 2,
-                    itemBuilder: (context, index) {
-                      return CardClass(
-                        className: 'RPL 2',
-                        teachersName: 'yati',
-                        color: blueColor,
-                        lessonName: 'Math',
-                        theNumberOfStudent: 21,
-                      );
-                    },
+                      },
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text('Task', style: Theme.of(context).textTheme.titleLarge),
-                  Text(
-                    'View all',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: primaryColor),
-                  ),
+                  const SizedBox(height: 60),
                 ],
               ),
-              const SizedBox(height: 16),
-              const CardTask(
-                lessonName: 'Math',
-                schedule: 'Modul 5',
-                teachersName: 'Yati S.Pd',
-                time: '09:00-11:00',
-              ),
-              const SizedBox(height: 16),
-              const CardTask(
-                lessonName: 'Math',
-                schedule: 'Modul 5',
-                teachersName: 'Yati S.Pd',
-                time: '09:00-11:00',
-              ),
-              const SizedBox(height: 16),
-              const CardTask(
-                lessonName: 'Math',
-                schedule: 'Modul 5',
-                teachersName: 'Yati S.Pd',
-                time: '09:00-11:00',
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -220,100 +307,6 @@ class CardTask extends StatelessWidget {
                       .textTheme
                       .bodySmall!
                       .copyWith(fontWeight: regular, fontSize: 18)),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class CardClass extends StatelessWidget {
-  final String lessonName;
-  final String className;
-  final String teachersName;
-  final String pattern;
-  final int theNumberOfStudent;
-  final Color color;
-  const CardClass({
-    super.key,
-    required this.lessonName,
-    required this.className,
-    required this.teachersName,
-    this.pattern = '',
-    required this.theNumberOfStudent,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      width: 150,
-      height: 180,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: color,
-      ),
-      child: Stack(
-        children: [
-          pattern != ''
-              ? Transform.translate(
-                  offset: const Offset(10, 20),
-                  child: SvgPicture.asset('assets/$pattern'),
-                )
-              : const SizedBox(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  width: 70,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(40),
-                    color: color.withGreen(150)
-                      ..withBlue(150)
-                      ..withRed(10),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: whiteColor,
-                        ),
-                        child: Icon(Icons.school_rounded,
-                            color: primaryColor, size: 18),
-                      ),
-                      const Spacer(),
-                      Text(
-                        theNumberOfStudent.toString(),
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            fontSize: 16,
-                            color: whiteColor,
-                            fontWeight: semiBold),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const Spacer(),
-              Text(lessonName,
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontSize: 16, color: whiteColor, fontWeight: semiBold)),
-              Text(className,
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontSize: 16, color: whiteColor, fontWeight: semiBold)),
-              Text(
-                teachersName,
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    fontSize: 12, color: whiteColor, fontWeight: regular),
-              ),
             ],
           ),
         ],

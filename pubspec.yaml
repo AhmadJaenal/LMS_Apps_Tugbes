@@ -39,6 +39,8 @@ dependencies:
   flutter_svg: ^2.0.5
   get: ^4.6.5
   page_transition: ^2.0.9
+  dotted_border: ^2.0.0+3
+  simple_animations: ^5.0.1
 
 dev_dependencies:
   flutter_test:
