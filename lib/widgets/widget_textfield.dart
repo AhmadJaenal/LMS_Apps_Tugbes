@@ -16,7 +16,7 @@ class CustomTextfield extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: margin),
+      // margin: EdgeInsets.symmetric(horizontal: margin),
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

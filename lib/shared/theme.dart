@@ -8,6 +8,7 @@ Color secondaryColor = const Color(0xff898989);
 Color blueColor = const Color(0xff3200E0);
 Color redColor = const Color(0xffFD443A);
 Color yellowColor = const Color(0xffFFB71E);
+Color greenColor = const Color(0xff38E54D);
 
 FontWeight light = FontWeight.w300;
 FontWeight regular = FontWeight.w400;
