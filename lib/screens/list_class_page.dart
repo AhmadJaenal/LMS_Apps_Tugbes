@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lms_app_tugbes/animation/fade_animation.dart';
 
 import '../shared/theme.dart';
 
@@ -10,9 +11,11 @@ class ListClassPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQueryOfHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: whiteColor,
-        elevation: 0,
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(60),
+        child: SizedBox(
+          height: 60,
+        ),
       ),
       body: Column(
         children: [
@@ -48,26 +51,35 @@ class ListClassPage extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: mediaQueryOfHeight * .8,
-            margin: EdgeInsets.symmetric(horizontal: margin),
-            child: ListView.builder(
-              padding: const EdgeInsets.all(0),
-              itemCount: 5,
-              itemBuilder: (BuildContext context, index) {
-                return Padding(
-                  padding: index == 0
-                      ? const EdgeInsets.only(top: 0)
-                      : const EdgeInsets.only(top: 16),
-                  child: const CardClass(
-                    lessonName: 'Math',
-                    teachersName: 'Yati S.Pd',
-                    description: 'Module 6',
-                    theNumberOfStudent: 21,
-                  ),
-                );
-              },
+          const SizedBox(height: 40),
+          FadeAnimation(
+            offsetY: 100,
+            childWidget: Container(
+              width: double.infinity,
+              height: mediaQueryOfHeight * .7,
+              margin: EdgeInsets.symmetric(horizontal: margin),
+              child: ListView.builder(
+                padding: const EdgeInsets.all(0),
+                itemCount: 5,
+                itemBuilder: (BuildContext context, index) {
+                  return Padding(
+                    padding: index == 0
+                        ? const EdgeInsets.only(top: 0)
+                        : const EdgeInsets.only(top: 16),
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.toNamed('/list-module-student');
+                      },
+                      child: const CardClass(
+                        lessonName: 'Math',
+                        teachersName: 'Yati S.Pd',
+                        description: 'Module 6',
+                        theNumberOfStudent: 21,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ],

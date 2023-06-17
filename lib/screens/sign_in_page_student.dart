@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:lms_app_tugbes/animation/fade_animation.dart';
+import 'package:lms_app_tugbes/screens/dashboard_page_student.dart';
+import 'package:lms_app_tugbes/screens/list_class_page.dart';
+import 'package:lms_app_tugbes/screens/profile_page.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
+import 'package:lms_app_tugbes/widgets/widget_nav_bar.dart';
 import 'package:lms_app_tugbes/widgets/widget_textfield.dart';
 
 class SignInStudent extends StatefulWidget {
@@ -97,7 +101,11 @@ class _SignInStudentState extends State<SignInStudent>
                             CustomButton(
                               titleButton: 'Sign In',
                               ontap: () {
-                                Get.offNamed('/dashboard');
+                                Get.off(const NavBarMenu(pageOption: [
+                                  DashboardStudent(),
+                                  ListClassPage(),
+                                  ProfilePage()
+                                ]));
                               },
                             ),
                             const SizedBox(height: 24),

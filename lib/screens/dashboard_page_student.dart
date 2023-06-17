@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:lms_app_tugbes/animation/fade_animation.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 import 'package:lms_app_tugbes/widgets/card_class.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
-import 'package:lms_app_tugbes/widgets/widget_textfield.dart';
+import 'package:lms_app_tugbes/widgets/widget_pop_up.dart';
+import 'package:lms_app_tugbes/widgets/widget_task.dart';
 
-class Dashboard extends StatefulWidget {
-  Dashboard({super.key});
+class DashboardStudent extends StatefulWidget {
+  const DashboardStudent({super.key});
 
   @override
-  State<Dashboard> createState() => _DashboardState();
+  State<DashboardStudent> createState() => _DashboardStudentState();
 }
 
-class _DashboardState extends State<Dashboard>
-    with SingleTickerProviderStateMixin {
+class _DashboardStudentState extends State<DashboardStudent> {
   TextEditingController idClassController = TextEditingController();
 
   @override
+  void dispose() {
+    idClassController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    bool isVisible = false;
     final mediaQueryOfWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
@@ -28,11 +36,12 @@ class _DashboardState extends State<Dashboard>
           children: [
             FadeAnimation(
               childWidget: Align(
-                  alignment: const Alignment(1, 4),
-                  child: SvgPicture.asset(
-                    'assets/pattern.svg',
-                    fit: BoxFit.cover,
-                  )),
+                alignment: const Alignment(1, 4),
+                child: SvgPicture.asset(
+                  'assets/pattern.svg',
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
             SingleChildScrollView(
               child: Column(
@@ -60,14 +69,20 @@ class _DashboardState extends State<Dashboard>
                         FadeAnimation(
                           offsetX: 100,
                           childWidget: Container(
-                            width: 38,
-                            height: 38,
-                            decoration: BoxDecoration(
+                            width: 42,
+                            decoration: const BoxDecoration(
                               shape: BoxShape.circle,
-                              color: blueColor,
                             ),
-                            child: Icon(Icons.person_outline_rounded,
-                                color: whiteColor, size: 14, weight: 3),
+                            child: Container(
+                              width: 38,
+                              height: 38,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: blueColor,
+                              ),
+                              child: Icon(Icons.person_outline_rounded,
+                                  color: whiteColor, size: 14, weight: 3),
+                            ),
                           ),
                         ),
                       ],
@@ -80,54 +95,31 @@ class _DashboardState extends State<Dashboard>
                       offsetX: -100,
                       childWidget: CustomButtonClass(
                         onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  actions: <Widget>[
-                                    Container(
-                                      padding: const EdgeInsets.all(16),
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: whiteColor,
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Icon(Icons.link,
-                                                  color: primaryColor,
-                                                  weight: 24),
-                                              const SizedBox(width: 8),
-                                              Text(
-                                                'Add Class',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium!
-                                                    .copyWith(
-                                                        color: primaryColor,
-                                                        fontSize: 18,
-                                                        fontWeight: semiBold),
-                                              )
-                                            ],
-                                          ),
-                                          CustomTextfield(
-                                            controller: idClassController,
-                                            hintText: 'Add link class',
-                                            titleTextfield: '',
-                                          ),
-                                          const SizedBox(height: 16),
-                                          CustomButtonClass(
-                                            isBig: true,
-                                            titleButton: 'Join',
-                                            onTap: () {},
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              });
+                          return showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return CustomPopUp(
+                                controller: idClassController,
+                                hintText: 'Add link class',
+                                titleButton: 'Join',
+                                titlePopUp: 'Add Class',
+                                onTap: () {
+                                  Get.back();
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return const CustomPopUpNotif(
+                                        title: 'Success Join',
+                                        desc:
+                                            'You have successfully\njoined this class',
+                                        icon: 'icon_success.svg',
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                          );
                         },
                         titleButton: 'Join Class',
                       ),
@@ -165,22 +157,23 @@ class _DashboardState extends State<Dashboard>
                   const SizedBox(height: 16),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: Container(
-                      width: mediaQueryOfWidth,
-                      height: 180,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 5,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: index == 0
-                                ? const EdgeInsets.only(left: 24)
-                                : index == 4
-                                    ? const EdgeInsets.only(right: 24, left: 16)
-                                    : const EdgeInsets.only(left: 16),
-                            child: FadeAnimation(
-                              offsetX: 100,
-                              childWidget: CardClass(
+                    child: FadeAnimation(
+                      offsetX: 100,
+                      childWidget: Container(
+                        width: mediaQueryOfWidth,
+                        height: 180,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 5,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: index == 0
+                                  ? const EdgeInsets.only(left: 24)
+                                  : index == 4
+                                      ? const EdgeInsets.only(
+                                          right: 24, left: 16)
+                                      : const EdgeInsets.only(left: 16),
+                              child: CardClass(
                                 className: 'RPL 2',
                                 teachersName: 'yati',
                                 color: blueColor,
@@ -190,9 +183,9 @@ class _DashboardState extends State<Dashboard>
                                   Get.toNamed('/list-module-student');
                                 },
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
@@ -246,70 +239,50 @@ class _DashboardState extends State<Dashboard>
                       },
                     ),
                   ),
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 90),
                 ],
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class CardTask extends StatelessWidget {
-  final String lessonName;
-  final String teachersName;
-  final String schedule;
-  final String time;
-  const CardTask({
-    super.key,
-    required this.lessonName,
-    required this.teachersName,
-    required this.schedule,
-    required this.time,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      width: double.infinity,
-      height: 137,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: secondaryColor.withOpacity(0.3), width: 2),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('$lessonName\n$schedule',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(fontWeight: regular, fontSize: 20)),
-              const Icon(Icons.arrow_forward_ios_rounded),
+        floatingActionButton: Container(
+          width: double.infinity,
+          height: 70,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(50)),
+            color: whiteColor,
+            boxShadow: [
+              BoxShadow(
+                offset: const Offset(0, 17),
+                blurRadius: 215,
+                color: const Color(0xff7281DF).withOpacity(.12),
+              ),
+              BoxShadow(
+                offset: const Offset(0, 3.84),
+                blurRadius: 22.2,
+                color: const Color(0xff7281DF).withOpacity(.08),
+              ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(teachersName,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(fontWeight: regular, fontSize: 18)),
-              Text(time,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(fontWeight: regular, fontSize: 18)),
+          child: GNav(
+            activeColor: blueColor,
+            color: secondaryColor,
+            iconSize: 24,
+            padding: const EdgeInsets.symmetric(horizontal: 50),
+            tabs: const [
+              GButton(
+                icon: Icons.home_filled,
+              ),
+              GButton(
+                icon: Icons.school_rounded,
+              ),
+              GButton(
+                icon: Icons.person_2_rounded,
+              ),
             ],
           ),
-        ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }
