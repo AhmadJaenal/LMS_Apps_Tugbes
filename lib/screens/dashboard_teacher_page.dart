@@ -1,35 +1,53 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 import 'package:lms_app_tugbes/widgets/card_class.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
-import 'package:lms_app_tugbes/widgets/widget_textfield.dart';
+import 'package:lms_app_tugbes/widgets/widget_pop_up.dart';
+import 'package:lms_app_tugbes/widgets/widget_task.dart';
 
-class DashboardTeacher extends StatelessWidget {
+class DashboardTeacher extends StatefulWidget {
   DashboardTeacher({super.key});
 
-  TextEditingController idClassController = TextEditingController();
+  @override
+  State<DashboardTeacher> createState() => _DashboardTeacherState();
+}
+
+class _DashboardTeacherState extends State<DashboardTeacher> {
+  TextEditingController nameClassController = TextEditingController();
+
+  @override
+  void dispose() {
+    nameClassController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final mediaQueryOfWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
+        appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(60),
+          child: SizedBox(height: 30),
+        ),
         backgroundColor: whiteColor,
         body: Stack(
           children: [
             Align(
-                alignment: const Alignment(1, 4),
-                child: SvgPicture.asset(
-                  'assets/pattern.svg',
-                  fit: BoxFit.cover,
-                )),
+              alignment: const Alignment(1, 4),
+              child: SvgPicture.asset(
+                'assets/pattern.svg',
+                fit: BoxFit.cover,
+              ),
+            ),
             SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 42),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: margin),
                     width: double.infinity,
@@ -66,49 +84,26 @@ class DashboardTeacher extends StatelessWidget {
                         showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return AlertDialog(
-                                actions: <Widget>[
-                                  Container(
-                                    padding: const EdgeInsets.all(16),
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: whiteColor,
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Icon(Icons.link,
-                                                color: primaryColor,
-                                                weight: 24),
-                                            const SizedBox(width: 8),
-                                            Text(
-                                              'Create Class',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium!
-                                                  .copyWith(
-                                                      color: primaryColor,
-                                                      fontSize: 18,
-                                                      fontWeight: semiBold),
-                                            )
-                                          ],
-                                        ),
-                                        CustomTextfield(
-                                          controller: idClassController,
-                                          hintText: 'Add Name Class',
-                                          titleTextfield: '',
-                                        ),
-                                        const SizedBox(height: 16),
-                                        CustomButtonClass(
-                                          isBig: true,
-                                          titleButton: 'Create',
-                                          onTap: () {},
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                              return CustomPopUp(
+                                controller: nameClassController,
+                                hintText: 'Add name class',
+                                titleButton: 'Create',
+                                titlePopUp: 'Create Class',
+                                onTap: () {
+                                  String codeClass = generateRandomCode(10);
+                                  Get.back();
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return CustomPopUpNotif(
+                                        title: 'Success Create Class',
+                                        desc:
+                                            'Classroom has been successfully created share this code\n"$codeClass"\nto invite others to join',
+                                        icon: 'icon_success.svg',
+                                      );
+                                    },
+                                  );
+                                },
                               );
                             });
                       },
@@ -221,60 +216,11 @@ class DashboardTeacher extends StatelessWidget {
   }
 }
 
-class CardTask extends StatelessWidget {
-  final String lessonName;
-  final String teachersName;
-  final String schedule;
-  final String time;
-  const CardTask({
-    super.key,
-    required this.lessonName,
-    required this.teachersName,
-    required this.schedule,
-    required this.time,
-  });
+String generateRandomCode(int length) {
+  final random = Random();
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  final codeUnits =
+      List.generate(length, (index) => chars[random.nextInt(chars.length)]);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      width: double.infinity,
-      height: 137,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: secondaryColor.withOpacity(0.3), width: 2),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('$lessonName\n$schedule',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(fontWeight: regular, fontSize: 20)),
-              const Icon(Icons.arrow_forward_ios_rounded),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(teachersName,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(fontWeight: regular, fontSize: 18)),
-              Text(time,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(fontWeight: regular, fontSize: 18)),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+  return codeUnits.join('');
 }

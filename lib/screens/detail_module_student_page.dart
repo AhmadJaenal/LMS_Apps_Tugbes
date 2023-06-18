@@ -10,10 +10,14 @@ class DetailModuleStudent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(60),
+        child: SizedBox(height: 60),
+      ),
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 42, horizontal: margin),
+            padding: EdgeInsets.symmetric(horizontal: margin),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

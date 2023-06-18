@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:lms_app_tugbes/animation/fade_animation.dart';
+import 'package:lms_app_tugbes/screens/dashboard_teacher_page.dart';
+import 'package:lms_app_tugbes/screens/list_class_page.dart';
+import 'package:lms_app_tugbes/screens/profile_page.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
+import 'package:lms_app_tugbes/widgets/widget_nav_bar.dart';
 import 'package:lms_app_tugbes/widgets/widget_textfield.dart';
 
 class SignInTeacher extends StatefulWidget {
@@ -92,7 +96,11 @@ class _SignInTeacherState extends State<SignInTeacher>
                         childWidget: CustomButton(
                           titleButton: 'Sign In',
                           ontap: () {
-                            Get.offNamed('/dashboard-teacher');
+                            Get.off(NavBarMenu(pageOption: [
+                              DashboardTeacher(),
+                              const ListClassPage(),
+                              const ProfilePage()
+                            ]));
                           },
                         ),
                       ),

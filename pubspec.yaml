@@ -41,6 +41,7 @@ dependencies:
   page_transition: ^2.0.9
   dotted_border: ^2.0.0+3
   simple_animations: ^5.0.1
+  google_nav_bar: ^5.0.6
 
 dev_dependencies:
   flutter_test:

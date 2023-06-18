@@ -4,9 +4,9 @@ import 'package:lms_app_tugbes/screens/dashboard_page_student.dart';
 import 'package:lms_app_tugbes/screens/sign_in_page_student.dart';
 import 'package:lms_app_tugbes/screens/sign_up_page_student.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
+import 'package:lms_app_tugbes/widgets/widget_nav_bar.dart';
 
 import 'screens/dashboard_teacher_page.dart';
-import 'screens/detail_module_teacher.dart';
 import 'screens/list_module_student_page.dart';
 import 'screens/list_class_page.dart';
 import 'screens/list_module_teacher_page.dart';
@@ -14,8 +14,6 @@ import 'screens/sign_in_teacher_page.dart';
 import 'screens/sign_up_teacher_page.dart';
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await MongoDatabase.connect();
   runApp(const MyApp());
 }
 
@@ -50,15 +48,15 @@ class MyApp extends StatelessWidget {
         ),
       ),
       routes: {
-        '/': (context) => SignInStudent(),
-        '/signIn-student': (context) => SignInStudent(),
+        '/': (context) => const SignInStudent(),
+        '/signIn-student': (context) => const SignInStudent(),
         '/signIn-teacher': (context) => SignInTeacher(),
         '/signUp-student': (context) => SignUpStudent(),
         '/signUp-teacher': (context) => SignUpTeacher(),
-        '/dashboard': (context) => Dashboard(),
+        '/dashboard-student': (context) => const DashboardStudent(),
         '/dashboard-teacher': (context) => DashboardTeacher(),
-        '/list-page': (context) => ListClassPage(),
-        '/list-module-student': (context) => ListModuleStudent(),
+        '/list-page': (context) => const ListClassPage(),
+        '/list-module-student': (context) => const ListModuleStudent(),
         '/list-module-teacher': (context) => ListModuleTeacher(),
       },
     );
