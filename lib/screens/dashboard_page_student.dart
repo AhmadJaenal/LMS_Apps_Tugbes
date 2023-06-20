@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:lms_app_tugbes/animation/fade_animation.dart';
+import 'package:lms_app_tugbes/controller/url_launcher.dart';
+import 'package:lms_app_tugbes/screens/detail_task_page.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 import 'package:lms_app_tugbes/widgets/card_class.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
@@ -18,6 +19,7 @@ class DashboardStudent extends StatefulWidget {
 
 class _DashboardStudentState extends State<DashboardStudent> {
   TextEditingController idClassController = TextEditingController();
+  final _formState = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -31,7 +33,7 @@ class _DashboardStudentState extends State<DashboardStudent> {
     final mediaQueryOfWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: whiteColor,
+        backgroundColor: secondaryColor.withOpacity(.01),
         body: Stack(
           children: [
             FadeAnimation(
@@ -98,25 +100,34 @@ class _DashboardStudentState extends State<DashboardStudent> {
                           return showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return CustomPopUp(
-                                controller: idClassController,
-                                hintText: 'Add link class',
-                                titleButton: 'Join',
-                                titlePopUp: 'Add Class',
-                                onTap: () {
-                                  Get.back();
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return const CustomPopUpNotif(
-                                        title: 'Success Join',
-                                        desc:
-                                            'You have successfully\njoined this class',
-                                        icon: 'icon_success.svg',
+                              return Form(
+                                autovalidateMode: AutovalidateMode.always,
+                                key: _formState,
+                                child: CustomPopUp(
+                                  controller: idClassController,
+                                  hintText: 'Add link class',
+                                  titleButton: 'Join',
+                                  titlePopUp: 'Add Class',
+                                  onTap: () {
+                                    if (_formState.currentState!.validate()) {
+                                      Get.back();
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return CustomPopUpNotif(
+                                            title: 'Success Join',
+                                            desc:
+                                                'You have successfully\njoined this class',
+                                            icon: 'icon_success.svg',
+                                            ontap: () {
+                                              openWhatsApp("089663774293");
+                                            },
+                                          );
+                                        },
                                       );
-                                    },
-                                  );
-                                },
+                                    }
+                                  },
+                                ),
                               );
                             },
                           );
@@ -128,30 +139,10 @@ class _DashboardStudentState extends State<DashboardStudent> {
                   const SizedBox(height: 24),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: margin),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        FadeAnimation(
-                          offsetX: -100,
-                          childWidget: Text('Your Class',
-                              style: Theme.of(context).textTheme.titleLarge),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed('/list-page');
-                          },
-                          child: FadeAnimation(
-                            offsetX: 50,
-                            childWidget: Text(
-                              'View all',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(color: primaryColor),
-                            ),
-                          ),
-                        ),
-                      ],
+                    child: FadeAnimation(
+                      offsetX: -100,
+                      childWidget: Text('Your Class',
+                          style: Theme.of(context).textTheme.titleLarge),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -161,14 +152,23 @@ class _DashboardStudentState extends State<DashboardStudent> {
                       offsetX: 100,
                       childWidget: Container(
                         width: mediaQueryOfWidth,
-                        height: 180,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 50,
+                              offset: const Offset(0, 0),
+                              color: secondaryColor.withOpacity(.13),
+                            ),
+                          ],
+                        ),
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: 5,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: index == 0
-                                  ? const EdgeInsets.only(left: 24)
+                                  ? const EdgeInsets.only(left: 16)
                                   : index == 4
                                       ? const EdgeInsets.only(
                                           right: 24, left: 16)
@@ -176,7 +176,6 @@ class _DashboardStudentState extends State<DashboardStudent> {
                               child: CardClass(
                                 className: 'RPL 2',
                                 teachersName: 'yati',
-                                color: blueColor,
                                 lessonName: 'Math',
                                 theNumberOfStudent: 21,
                                 onTap: () {
@@ -216,7 +215,6 @@ class _DashboardStudentState extends State<DashboardStudent> {
                   ),
                   const SizedBox(height: 16),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: margin),
                     width: double.infinity,
                     height: 400,
                     child: ListView.builder(
@@ -227,12 +225,21 @@ class _DashboardStudentState extends State<DashboardStudent> {
                               ? const EdgeInsets.only(top: 0)
                               : const EdgeInsets.only(top: 16),
                           child: FadeAnimation(
-                            offsetY: 200,
-                            childWidget: const CardTask(
-                              lessonName: 'Math',
-                              schedule: 'Modul 5',
+                            offsetY: 100,
+                            childWidget: CardTask(
+                              lessonName: 'Software analysis',
+                              titleTask:
+                                  'Analisis kebutuhan sistem perangkat lunak',
                               teachersName: 'Yati S.Pd',
                               time: '09:00-11:00',
+                              ontap: () {
+                                Get.to(const DetailTask(
+                                  lessonName: 'Software analysis',
+                                  desc:
+                                      "Tugas ini adalah tentang pengembangan aplikasi sederhana menggunakan Flutter, sebuah kerangka kerja (framework) yang digunakan untuk membuat aplikasi lintas platform yang indah dan responsif. Anda diminta untuk membuat aplikasi To-Do List yang memungkinkan pengguna untuk mencatat, mengelola, dan menyelesaikan tugas-tugas mereka.",
+                                  time: "09:00-11:00",
+                                ));
+                              },
                             ),
                           ),
                         );
@@ -245,44 +252,6 @@ class _DashboardStudentState extends State<DashboardStudent> {
             ),
           ],
         ),
-        floatingActionButton: Container(
-          width: double.infinity,
-          height: 70,
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(50)),
-            color: whiteColor,
-            boxShadow: [
-              BoxShadow(
-                offset: const Offset(0, 17),
-                blurRadius: 215,
-                color: const Color(0xff7281DF).withOpacity(.12),
-              ),
-              BoxShadow(
-                offset: const Offset(0, 3.84),
-                blurRadius: 22.2,
-                color: const Color(0xff7281DF).withOpacity(.08),
-              ),
-            ],
-          ),
-          child: GNav(
-            activeColor: blueColor,
-            color: secondaryColor,
-            iconSize: 24,
-            padding: const EdgeInsets.symmetric(horizontal: 50),
-            tabs: const [
-              GButton(
-                icon: Icons.home_filled,
-              ),
-              GButton(
-                icon: Icons.school_rounded,
-              ),
-              GButton(
-                icon: Icons.person_2_rounded,
-              ),
-            ],
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }

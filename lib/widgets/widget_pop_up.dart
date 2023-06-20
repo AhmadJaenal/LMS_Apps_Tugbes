@@ -67,8 +67,13 @@ class CustomPopUpNotif extends StatelessWidget {
   final String title;
   final String desc;
   final String icon;
+  final Function() ontap;
   const CustomPopUpNotif(
-      {super.key, required this.title, required this.desc, required this.icon});
+      {super.key,
+      required this.title,
+      required this.desc,
+      required this.icon,
+      required this.ontap});
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +105,7 @@ class CustomPopUpNotif extends StatelessWidget {
                 children: [
                   CustomButton(
                     titleButton: 'Go',
-                    ontap: () {},
+                    ontap: ontap,
                   ),
                   GestureDetector(
                     onTap: () {

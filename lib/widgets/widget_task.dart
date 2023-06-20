@@ -4,56 +4,82 @@ import 'package:lms_app_tugbes/shared/theme.dart';
 class CardTask extends StatelessWidget {
   final String lessonName;
   final String teachersName;
-  final String schedule;
+  final String titleTask;
   final String time;
+  final Function() ontap;
   const CardTask({
     super.key,
     required this.lessonName,
     required this.teachersName,
-    required this.schedule,
+    required this.titleTask,
     required this.time,
+    required this.ontap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      width: double.infinity,
-      height: 137,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: secondaryColor.withOpacity(0.3), width: 2),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('$lessonName\n$schedule',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(fontWeight: regular, fontSize: 20)),
-              const Icon(Icons.arrow_forward_ios_rounded),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(teachersName,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(fontWeight: regular, fontSize: 18)),
-              Text(time,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(fontWeight: regular, fontSize: 18)),
-            ],
-          ),
-        ],
+    return GestureDetector(
+      onTap: ontap,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: margin),
+        padding: const EdgeInsets.all(16),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: whiteColor,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 50,
+              offset: const Offset(0, 0),
+              color: secondaryColor.withOpacity(.13),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(lessonName,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(fontWeight: bold)),
+                const Spacer(),
+                Text(teachersName,
+                    style: Theme.of(context).textTheme.bodySmall),
+                const SizedBox(width: 4),
+                Icon(Icons.verified, size: 18, color: blueColor),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.only(right: 50),
+              child: Text(titleTask,
+                  style: Theme.of(context).textTheme.bodySmall,
+                  overflow: TextOverflow.ellipsis),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(Icons.timer_outlined, size: 18, color: secondaryColor),
+                const SizedBox(width: 4),
+                Text(time, style: Theme.of(context).textTheme.bodySmall),
+              ],
+            ),
+            const SizedBox(height: 8),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: LinearProgressIndicator(
+                color: yellowColor,
+                value: .9,
+                backgroundColor: secondaryColor.withOpacity(.4),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

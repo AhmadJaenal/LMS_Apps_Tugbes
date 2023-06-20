@@ -21,6 +21,7 @@ class _SignInStudentState extends State<SignInStudent>
     with SingleTickerProviderStateMixin {
   final TextEditingController nisController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final _formState = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -40,127 +41,135 @@ class _SignInStudentState extends State<SignInStudent>
             Center(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FadeAnimation(
-                      offsetY: -100,
-                      childWidget: Column(
-                        children: [
-                          Text(
-                            'Welcome back',
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Sign in as a student',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(color: secondaryColor, fontSize: 16),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    Container(
-                      width: 100,
-                      height: 1,
-                      color: secondaryColor.withOpacity(0.4),
-                    ),
-                    const SizedBox(height: 32),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: margin),
-                      child: FadeAnimation(
-                        childWidget: CustomTextfield(
-                          controller: nisController,
-                          titleTextfield: 'NIS',
-                          hintText: 'Enter your NIS',
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: margin),
-                      child: FadeAnimation(
-                        childWidget: CustomTextfield(
-                          controller: passwordController,
-                          titleTextfield: 'Password',
-                          hintText: 'Enter your password',
-                          obsecured: true,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: margin),
-                      child: FadeAnimation(
-                        offsetY: 50,
+                child: Form(
+                  autovalidateMode: AutovalidateMode.always,
+                  key: _formState,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FadeAnimation(
+                        offsetY: -100,
                         childWidget: Column(
                           children: [
-                            CustomButton(
-                              titleButton: 'Sign In',
-                              ontap: () {
-                                Get.off(const NavBarMenu(pageOption: [
-                                  DashboardStudent(),
-                                  ListClassPage(),
-                                  ProfilePage()
-                                ]));
-                              },
-                            ),
-                            const SizedBox(height: 24),
-                            GestureDetector(
-                              onTap: () {
-                                Get.offNamed('/signIn-teacher');
-                              },
-                              child: RichText(
-                                text: TextSpan(
-                                  text: 'Sign in as a ',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(color: secondaryColor),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: 'teacher',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall!
-                                          .copyWith(color: primaryColor),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            Text(
+                              'Welcome back',
+                              style: Theme.of(context).textTheme.titleLarge,
                             ),
                             const SizedBox(height: 8),
-                            GestureDetector(
-                              onTap: () {
-                                Get.offNamed('/signUp-student');
-                              },
-                              child: RichText(
-                                text: TextSpan(
-                                  text: "Don't have an account yet? ",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(color: secondaryColor),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: 'Sign Up',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall!
-                                          .copyWith(color: primaryColor),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            Text(
+                              'Sign in as a student',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                      color: secondaryColor, fontSize: 16),
                             ),
                           ],
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 24),
+                      Container(
+                        width: 100,
+                        height: 1,
+                        color: secondaryColor.withOpacity(0.4),
+                      ),
+                      const SizedBox(height: 32),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: margin),
+                        child: FadeAnimation(
+                          childWidget: CustomTextfield(
+                            controller: nisController,
+                            titleTextfield: 'NIS',
+                            hintText: 'Enter your NIS',
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: margin),
+                        child: FadeAnimation(
+                          childWidget: CustomTextfield(
+                            controller: passwordController,
+                            titleTextfield: 'Password',
+                            hintText: 'Enter your password',
+                            obsecured: true,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: margin),
+                        child: FadeAnimation(
+                          offsetY: 50,
+                          childWidget: Column(
+                            children: [
+                              CustomButton(
+                                width: double.infinity,
+                                titleButton: 'Sign In',
+                                ontap: () {
+                                  if (_formState.currentState!.validate()) {
+                                    Get.off(const NavBarMenu(pageOption: [
+                                      DashboardStudent(),
+                                      ListClassPage(),
+                                      ProfilePage()
+                                    ]));
+                                  }
+                                },
+                              ),
+                              const SizedBox(height: 24),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.offNamed('/signIn-teacher');
+                                },
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: 'Sign in as a ',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(color: secondaryColor),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: 'teacher',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(color: primaryColor),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.offNamed('/signUp-student');
+                                },
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: "Don't have an account yet? ",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(color: secondaryColor),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: 'Sign Up',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(color: primaryColor),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

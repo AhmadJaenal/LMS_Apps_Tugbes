@@ -15,6 +15,7 @@ class _NavBarMenuState extends State<NavBarMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final MediaQueryofWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: widget.pageOption.elementAt(selectedIndex),
       floatingActionButton: Container(
@@ -40,7 +41,7 @@ class _NavBarMenuState extends State<NavBarMenu> {
           activeColor: blueColor,
           color: secondaryColor,
           iconSize: 24,
-          padding: const EdgeInsets.symmetric(horizontal: 50),
+          padding: EdgeInsets.symmetric(horizontal: MediaQueryofWidth / 9),
           tabs: const [
             GButton(
               icon: Icons.home_filled,

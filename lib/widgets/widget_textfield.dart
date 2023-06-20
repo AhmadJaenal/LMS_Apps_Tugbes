@@ -29,11 +29,25 @@ class CustomTextfield extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 8),
-          TextField(
+          TextFormField(
+            validator: (value) {
+              if (value == "") {
+                return "input data correctly";
+              }
+            },
             controller: controller,
             obscureText: obsecured,
             decoration: InputDecoration(
-                border: InputBorder.none,
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: secondaryColor.withOpacity(.2), width: 2.0),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderSide:
+                      BorderSide(color: redColor.withOpacity(.7), width: 2.0),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                       color: secondaryColor.withOpacity(.4), width: 2.0),

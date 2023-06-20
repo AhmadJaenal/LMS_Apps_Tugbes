@@ -4,10 +4,12 @@ import 'package:lms_app_tugbes/shared/theme.dart';
 class CustomButton extends StatelessWidget {
   final String titleButton;
   final Function() ontap;
+  final double width;
   const CustomButton({
     super.key,
     required this.titleButton,
     required this.ontap,
+    this.width = 100,
   });
 
   @override
@@ -15,11 +17,11 @@ class CustomButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: ontap,
       style: ElevatedButton.styleFrom(
-        foregroundColor: blueColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        backgroundColor: primaryColor,
-        minimumSize: const Size(100, 48),
-      ),
+          foregroundColor: blueColor,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          backgroundColor: primaryColor,
+          minimumSize: Size(width, 48)),
       child: Text(
         titleButton,
         style: Theme.of(context)
