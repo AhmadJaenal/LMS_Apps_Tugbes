@@ -1,13 +1,23 @@
-class ListClass {
-  final String teachersName;
-  final String id;
+class KelasModel {
+  String nip;
+  String nama;
+  String kodeKelas;
 
-  const ListClass({this.teachersName = '', this.id = ''});
+  KelasModel({required this.nip, required this.nama, required this.kodeKelas});
 
-  factory ListClass.fromJson(Map<String, dynamic> json) {
-    return ListClass(
-      teachersName: json['name'],
-      id: json['id'],
+  factory KelasModel.fromJson(Map<String, dynamic> json) {
+    return KelasModel(
+      nip: json['nip'],
+      nama: json['nama'],
+      kodeKelas: json['kodeKelas'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'nip': nip,
+      'nama': nama,
+      'kodeKelas': kodeKelas,
+    };
   }
 }

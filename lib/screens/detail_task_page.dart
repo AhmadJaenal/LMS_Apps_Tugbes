@@ -44,7 +44,7 @@ class _DetailTaskState extends State<DetailTask> {
   @override
   bool isVisible = false;
   Widget build(BuildContext context) {
-    final mediaQueryOfHeight = MediaQuery.of(context).size.height;
+    // final mediaQueryOfHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(60),

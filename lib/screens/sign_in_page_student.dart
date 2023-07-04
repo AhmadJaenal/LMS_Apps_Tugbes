@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:lms_app_tugbes/animation/fade_animation.dart';
-import 'package:lms_app_tugbes/screens/dashboard_page_student.dart';
-import 'package:lms_app_tugbes/screens/list_class_page.dart';
-import 'package:lms_app_tugbes/screens/profile_page.dart';
+import 'package:lms_app_tugbes/screens/sign_up_page_student.dart';
+import 'package:lms_app_tugbes/services/auth_services.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
-import 'package:lms_app_tugbes/widgets/widget_nav_bar.dart';
 import 'package:lms_app_tugbes/widgets/widget_textfield.dart';
 
+import 'sign_in_teacher_page.dart';
+
 class SignInStudent extends StatefulWidget {
-  const SignInStudent({Key? key});
+  const SignInStudent({super.key});
 
   @override
   State<SignInStudent> createState() => _SignInStudentState();
@@ -19,9 +19,16 @@ class SignInStudent extends StatefulWidget {
 
 class _SignInStudentState extends State<SignInStudent>
     with SingleTickerProviderStateMixin {
-  final TextEditingController nisController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final _formState = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,9 +85,9 @@ class _SignInStudentState extends State<SignInStudent>
                         padding: EdgeInsets.symmetric(horizontal: margin),
                         child: FadeAnimation(
                           childWidget: CustomTextfield(
-                            controller: nisController,
-                            titleTextfield: 'NIS',
-                            hintText: 'Enter your NIS',
+                            controller: emailController,
+                            titleTextfield: 'Email',
+                            hintText: 'Enter your email',
                           ),
                         ),
                       ),
@@ -106,20 +113,25 @@ class _SignInStudentState extends State<SignInStudent>
                               CustomButton(
                                 width: double.infinity,
                                 titleButton: 'Sign In',
-                                ontap: () {
+                                ontap: () async {
                                   if (_formState.currentState!.validate()) {
-                                    Get.off(const NavBarMenu(pageOption: [
-                                      DashboardStudent(),
-                                      ListClassPage(),
-                                      ProfilePage()
-                                    ]));
+                                    AuthServices.signIn(
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                      collection: 'siswa',
+                                      isTeacher: false,
+                                    );
                                   }
                                 },
                               ),
                               const SizedBox(height: 24),
                               GestureDetector(
                                 onTap: () {
-                                  Get.offNamed('/signIn-teacher');
+                                  Get.off(
+                                    SignInTeacher(),
+                                    transition: Transition.fade,
+                                    duration: const Duration(seconds: 1),
+                                  );
                                 },
                                 child: RichText(
                                   text: TextSpan(
@@ -143,7 +155,11 @@ class _SignInStudentState extends State<SignInStudent>
                               const SizedBox(height: 8),
                               GestureDetector(
                                 onTap: () {
-                                  Get.offNamed('/signUp-student');
+                                  Get.off(
+                                    SignUpStudent(),
+                                    transition: Transition.fade,
+                                    duration: const Duration(seconds: 1),
+                                  );
                                 },
                                 child: RichText(
                                   text: TextSpan(

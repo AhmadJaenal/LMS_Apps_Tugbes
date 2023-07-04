@@ -1,12 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:lms_app_tugbes/animation/fade_animation.dart';
+import 'package:lms_app_tugbes/services/collection.dart';
 import 'package:lms_app_tugbes/widgets/card_class.dart';
 
+import '../animation/fade_animation.dart';
 import '../shared/theme.dart';
 
 class ListClassPage extends StatelessWidget {
-  const ListClassPage({super.key});
+  final String email;
+  final String collection;
+  const ListClassPage(
+      {super.key, required this.email, required this.collection});
 
   @override
   Widget build(BuildContext context) {
@@ -45,27 +49,32 @@ class ListClassPage extends StatelessWidget {
                   ),
                 ],
               ),
-              child: ListView.builder(
-                padding: const EdgeInsets.all(0),
-                itemCount: 5,
-                itemBuilder: (BuildContext context, index) {
-                  return Padding(
-                    padding: index == 0
-                        ? const EdgeInsets.only(top: 0)
-                        : const EdgeInsets.only(top: 16),
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.toNamed('/list-module-student');
+              child: StreamBuilder<QuerySnapshot<Object?>>(
+                stream: getClassStream(email: email, collection: collection),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    QuerySnapshot<Object?> classSnapshot = snapshot.data!;
+                    return ListView.builder(
+                      itemCount: classSnapshot.docs.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: CardClass(
+                            className: classSnapshot.docs[index]['nama_kelas'],
+                            lessonName: classSnapshot.docs[index]
+                                ['mata_pelajaran'],
+                            theNumberOfStudent: 21,
+                            onTap: () {},
+                          ),
+                        );
                       },
-                      child: CardClass(
-                        className: 'RPL 2',
-                        lessonName: 'Math',
-                        onTap: () {},
-                        teachersName: 'Yati Hariyati S.Pd',
-                        theNumberOfStudent: 21,
-                      ),
-                    ),
-                  );
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return const Center(child: Text('Not found class'));
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
                 },
               ),
             ),

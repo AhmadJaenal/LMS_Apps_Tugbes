@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "263286614360",
+    "project_id": "fir-lms-app",
+    "storage_bucket": "fir-lms-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:263286614360:android:9e9a134adae2bc8d525d2d",
+        "android_client_info": {
+          "package_name": "com.jaenal.lms_app_tugbes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "263286614360-hfrlhasfk1obn7u0he5ua00omg9h8160.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC81TertZ9nVJ6fKShxvZ6UCd6prJjYquI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "263286614360-hfrlhasfk1obn7u0he5ua00omg9h8160.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

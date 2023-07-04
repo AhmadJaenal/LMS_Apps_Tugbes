@@ -1,3 +1,4 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 
@@ -63,6 +64,52 @@ class CustomButtonClass extends StatelessWidget {
         backgroundColor: blueColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
+  }
+}
+
+class ButtonUploadFile extends StatelessWidget {
+  final String selectedFileName;
+  const ButtonUploadFile({super.key, this.selectedFileName = 'Upload File'});
+
+  @override
+  Widget build(BuildContext context) {
+    return DottedBorder(
+      dashPattern: const [5, 6],
+      strokeCap: StrokeCap.round,
+      color: secondaryColor.withOpacity(.4),
+      strokeWidth: 2,
+      borderType: BorderType.RRect,
+      radius: const Radius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        width: double.infinity,
+        height: 42,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Text(
+                  selectedFileName,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        fontSize: 16,
+                        color: secondaryColor,
+                        fontWeight: semiBold,
+                      ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Icon(Icons.add, color: secondaryColor),
+            ],
+          ),
         ),
       ),
     );

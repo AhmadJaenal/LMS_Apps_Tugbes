@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
 import 'package:lms_app_tugbes/widgets/widget_textfield.dart';
 
 class CustomPopUp extends StatelessWidget {
-  final TextEditingController controller;
+  final bool isTeacher;
+  final TextEditingController classNameC;
+  final TextEditingController lessonNameC;
   final String titleButton;
   final String hintText;
   final String titlePopUp;
   final Function() onTap;
   const CustomPopUp(
       {super.key,
-      required this.controller,
+      this.isTeacher = false,
+      required this.classNameC,
+      required this.lessonNameC,
       required this.titleButton,
       required this.hintText,
       required this.titlePopUp,
@@ -45,10 +50,17 @@ class CustomPopUp extends StatelessWidget {
                 ],
               ),
               CustomTextfield(
-                controller: controller,
-                hintText: hintText,
+                controller: classNameC,
+                hintText: 'Add class name',
                 titleTextfield: '',
               ),
+              isTeacher
+                  ? CustomTextfield(
+                      controller: lessonNameC,
+                      hintText: 'Add lesson name',
+                      titleTextfield: '',
+                    )
+                  : const SizedBox(),
               const SizedBox(height: 16),
               CustomButtonClass(
                 isBig: true,
@@ -67,13 +79,18 @@ class CustomPopUpNotif extends StatelessWidget {
   final String title;
   final String desc;
   final String icon;
+  final bool isTeacher;
+  final String code;
   final Function() ontap;
-  const CustomPopUpNotif(
-      {super.key,
-      required this.title,
-      required this.desc,
-      required this.icon,
-      required this.ontap});
+  const CustomPopUpNotif({
+    super.key,
+    required this.title,
+    required this.desc,
+    required this.icon,
+    required this.ontap,
+    this.isTeacher = false,
+    this.code = '',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +114,27 @@ class CustomPopUpNotif extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodySmall,
                 textAlign: TextAlign.center,
               ),
+              const SizedBox(height: 16),
+              isTeacher
+                  ? Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 8),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: secondaryColor, width: 2),
+                        color: secondaryColor.withOpacity(.2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: SelectableText(
+                        code,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        enableInteractiveSelection: true,
+                        cursorColor: blueColor,
+                        cursorWidth: 2.0,
+                        showCursor: true,
+                      ),
+                    )
+                  : const SizedBox(),
               const SizedBox(height: 32),
               SvgPicture.asset('assets/$icon'),
               const SizedBox(height: 32),
@@ -132,4 +170,74 @@ class CustomPopUpNotif extends StatelessWidget {
       ],
     );
   }
+}
+
+class PopUpLoginRegister extends StatelessWidget {
+  final String title;
+  final String desc;
+  final String icon;
+  const PopUpLoginRegister({
+    super.key,
+    required this.title,
+    required this.desc,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      actions: <Widget>[
+        Container(
+          padding: const EdgeInsets.all(16),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: whiteColor,
+          ),
+          child: Column(
+            children: [
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                desc,
+                style: Theme.of(context).textTheme.bodySmall,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                decoration: BoxDecoration(
+                  border: Border.all(color: secondaryColor, width: 2),
+                  color: secondaryColor.withOpacity(.2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              const SizedBox(height: 32),
+              SvgPicture.asset('assets/$icon'),
+              const SizedBox(height: 32),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+SnackBar customSnackbar(String errorMessage) {
+  return SnackBar(
+    content: Text(
+      errorMessage,
+      style: GoogleFonts.poppins(color: secondaryColor, fontSize: 16),
+    ),
+    duration: const Duration(seconds: 3),
+    behavior: SnackBarBehavior.floating,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10.0),
+    ),
+    backgroundColor: whiteColor,
+    margin: const EdgeInsets.all(16.0),
+    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+  );
 }
