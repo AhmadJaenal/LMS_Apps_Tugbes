@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lms_app_tugbes/screens/add_task.dart';
 import 'package:lms_app_tugbes/screens/detail_module.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
 import 'package:lms_app_tugbes/widgets/widget_module_card.dart';
 
-import '../services/collection.dart';
+import '../services/query_collection.dart';
 import '../shared/theme.dart';
 import 'add_module_teacher.dart';
 
 class ListModule extends StatelessWidget {
   final String learningCode;
   final String titleClass;
+  final String classCode;
   final bool isTeacher;
   const ListModule({
     super.key,
     required this.learningCode,
     required this.titleClass,
+    required this.classCode,
     this.isTeacher = false,
   });
 
@@ -81,7 +84,7 @@ class ListModule extends StatelessWidget {
                           String chapter = snapshot.data![index]['module'];
                           String titleModule = snapshot.data![index]['title'];
                           String dscModule = snapshot.data![index]['dsc'];
-                          String nameFile = snapshot.data![index]['name_file'];
+                          String fileName = snapshot.data![index]['name_file'];
                           return Padding(
                             padding: index == 0
                                 ? const EdgeInsets.only(top: 0)
@@ -92,7 +95,7 @@ class ListModule extends StatelessWidget {
                                   DetailModule(
                                     dsc: dscModule,
                                     titleModule: titleModule,
-                                    nameFile: nameFile,
+                                    fileName: fileName,
                                   ),
                                 );
                               },
@@ -117,11 +120,26 @@ class ListModule extends StatelessWidget {
           ? Padding(
               padding:
                   EdgeInsets.symmetric(vertical: margin, horizontal: margin),
-              child: CustomButton(
-                ontap: () {
-                  Get.to(AddModuleTeacher(learningCode: learningCode));
-                },
-                titleButton: 'Add Module',
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomButton(
+                    ontap: () {
+                      Get.to(AddModuleTeacher(learningCode: learningCode));
+                    },
+                    titleButton: 'Add Module',
+                  ),
+                  const SizedBox(width: 8),
+                  CustomButton(
+                    ontap: () {
+                      Get.to(AddTaskPage(
+                        learningCode: learningCode,
+                        classCode: classCode,
+                      ));
+                    },
+                    titleButton: 'Add Task',
+                  ),
+                ],
               ),
             )
           : const SizedBox(),

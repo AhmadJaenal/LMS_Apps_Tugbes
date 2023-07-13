@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:lms_app_tugbes/animation/fade_animation.dart';
 import 'package:lms_app_tugbes/screens/sign_in_page_student.dart';
 import 'package:lms_app_tugbes/services/auth_services.dart';
-import 'package:lms_app_tugbes/services/collection.dart';
+import 'package:lms_app_tugbes/services/query_collection.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
 import 'package:lms_app_tugbes/widgets/widget_textfield.dart';

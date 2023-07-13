@@ -4,32 +4,47 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lms_app_tugbes/services/query_collection.dart';
+import 'package:lms_app_tugbes/services/date.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
 import 'package:lms_app_tugbes/widgets/widget_textfield.dart';
 
 import '../shared/theme.dart';
 
-class AddModuleTeacher extends StatefulWidget {
+class AddTaskPage extends StatefulWidget {
   final String titleModule;
   final String learningCode;
-  const AddModuleTeacher(
-      {super.key, this.titleModule = "", required this.learningCode});
+  final String classCode;
+  const AddTaskPage({
+    super.key,
+    this.titleModule = "",
+    required this.learningCode,
+    required this.classCode,
+  });
 
   @override
-  State<AddModuleTeacher> createState() => AddModuleTeacherState();
+  State<AddTaskPage> createState() => AddTaskPageState();
 }
 
-class AddModuleTeacherState extends State<AddModuleTeacher> {
-  final TextEditingController moduleController = TextEditingController();
+class AddTaskPageState extends State<AddTaskPage> {
   final TextEditingController dscController = TextEditingController();
-  final TextEditingController titleController = TextEditingController();
-  final _formStateModule = GlobalKey<FormState>();
+  final _formStateTask = GlobalKey<FormState>();
   @override
   void dispose() {
-    moduleController.dispose();
     dscController.dispose();
-    titleController.dispose();
     super.dispose();
+  }
+
+  TimeOfDay _timeOfDay = const TimeOfDay(hour: 8, minute: 12);
+
+  void _showTimePicker() {
+    showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    ).then((value) {
+      setState(() {
+        _timeOfDay = value!;
+      });
+    });
   }
 
   String selectedFileName = 'Upload File';
@@ -46,6 +61,8 @@ class AddModuleTeacherState extends State<AddModuleTeacher> {
       uploadFile(nameFile: selectedFileName, file: file, folder: folder);
     }
   }
+
+  late String dateResult;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +95,7 @@ class AddModuleTeacherState extends State<AddModuleTeacher> {
                   ),
                   widget.titleModule == ""
                       ? Text(
-                          "Upload Module",
+                          "Task",
                           style: Theme.of(context).textTheme.titleLarge,
                         )
                       : Text(
@@ -88,42 +105,59 @@ class AddModuleTeacherState extends State<AddModuleTeacher> {
                   const SizedBox(),
                 ],
               ),
-              const SizedBox(height: 32),
-              Text(
-                'Module',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(fontWeight: medium, fontSize: 16),
-              ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
               Form(
-                key: _formStateModule,
+                key: _formStateTask,
                 autovalidateMode: AutovalidateMode.always,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomTextfield(
-                      controller: moduleController,
-                      titleTextfield: 'Module',
-                      hintText: 'Pertemuan ke-',
-                    ),
-                    const SizedBox(height: 16),
-                    CustomTextfield(
                       controller: dscController,
                       titleTextfield: 'Description',
-                      hintText: 'Pelajari materi berikut',
+                      hintText: 'Tugas pengganti kelas',
                     ),
                     const SizedBox(height: 16),
-                    CustomTextfield(
-                      controller: titleController,
-                      titleTextfield: 'Title Module',
-                      hintText: 'Matriks dan Determinan',
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _showTimePicker();
+                          },
+                          child: Text(
+                            _timeOfDay.format(context).toString(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .copyWith(fontWeight: semiBold),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Tanggal.showDate(context, (year, month, day) {
+                              setState(() {
+                                Tanggal.day;
+                                Tanggal.month;
+                                Tanggal.year;
+                              });
+                              dateResult =
+                                  "${Tanggal.day.toString()}-${Tanggal.month.toString()}-${Tanggal.year.toString()},${_timeOfDay.format(context).toString()}";
+                            });
+                          },
+                          child: Text(
+                            ',  ${Tanggal.day}-${Tanggal.month}-${Tanggal.year}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 16),
                     GestureDetector(
                       onTap: () {
-                        pickAndUploadFile(folder: 'materi');
+                        pickAndUploadFile(folder: 'tugas');
                       },
                       child:
                           ButtonUploadFile(selectedFileName: selectedFileName),
@@ -131,13 +165,14 @@ class AddModuleTeacherState extends State<AddModuleTeacher> {
                     const SizedBox(height: 24),
                     CustomButton(
                       ontap: () {
-                        if (_formStateModule.currentState!.validate()) {
-                          updateMateri(
-                            learningCode: widget.learningCode,
-                            chapter: moduleController.text,
+                        if (_formStateTask.currentState!.validate()) {
+                          final String codeTask = generateCode(5);
+                          addTask(
                             dsc: dscController.text,
-                            title: titleController.text,
-                            nameFile: selectedFileName,
+                            codeTask: codeTask,
+                            classCode: widget.classCode,
+                            deadline: dateResult,
+                            fileName: selectedFileName,
                           );
                           Get.back();
                         }
@@ -147,7 +182,7 @@ class AddModuleTeacherState extends State<AddModuleTeacher> {
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 50),
             ],
           ),
         ),

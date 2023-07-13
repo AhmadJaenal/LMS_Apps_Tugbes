@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:lms_app_tugbes/services/collection.dart';
+import 'package:lms_app_tugbes/services/query_collection.dart';
 import 'package:lms_app_tugbes/widgets/card_class.dart';
 
 import '../animation/fade_animation.dart';

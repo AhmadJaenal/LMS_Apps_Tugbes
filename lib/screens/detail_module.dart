@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:lms_app_tugbes/services/collection.dart';
+import 'package:lms_app_tugbes/services/query_collection.dart';
 
 import '../shared/theme.dart';
 
 class DetailModule extends StatelessWidget {
   final String titleModule;
   final String dsc;
-  final String nameFile;
+  final String fileName;
   const DetailModule(
       {super.key,
       required this.titleModule,
       required this.dsc,
-      required this.nameFile});
+      required this.fileName});
 
   @override
   Widget build(BuildContext context) {
@@ -92,12 +92,12 @@ class DetailModule extends StatelessWidget {
                   const SizedBox(width: 16),
                   GestureDetector(
                     onTap: () {
-                      downloadFile(fileUrl: nameFile);
+                      downloadFile(fileUrl: fileName, folder: 'materi');
                     },
                     child: SizedBox(
                       width: 250,
                       child: Text(
-                        nameFile,
+                        fileName,
                         style: Theme.of(context).textTheme.bodyMedium,
                         overflow: TextOverflow.ellipsis,
                       ),
