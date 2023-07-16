@@ -24,7 +24,7 @@ class AuthServices {
           password: password,
         );
         ScaffoldMessenger.of(Get.context!).showSnackBar(
-          customSnackbar("Sign Up Success"),
+          customSnackbar(message: "Sign Up Success", isError: false),
         );
         Get.off(NavBarMenu(
           pageOption: [
@@ -34,12 +34,12 @@ class AuthServices {
               isTeacher: isTeacher,
             ),
             ListClassPage(email: email, collection: collection),
-            const ProfilePage()
+            ProfilePage(email: email),
           ],
         ));
       } else {
         ScaffoldMessenger.of(Get.context!).showSnackBar(
-          customSnackbar("Password tidak sama"),
+          customSnackbar(message: "Password tidak sama"),
         );
       }
     } on FirebaseAuthException catch (e) {
@@ -54,7 +54,7 @@ class AuthServices {
         errorMessage = 'Email ini sudah tersedia';
       }
       ScaffoldMessenger.of(Get.context!).showSnackBar(
-        customSnackbar(errorMessage),
+        customSnackbar(message: e.toString()),
       );
     } catch (e) {
       return null;
@@ -76,11 +76,11 @@ class AuthServices {
             isTeacher: isTeacher,
           ),
           ListClassPage(email: email, collection: collection),
-          const ProfilePage()
+          ProfilePage(email: email),
         ],
       ));
       ScaffoldMessenger.of(Get.context!).showSnackBar(
-        customSnackbar("Sign In Success"),
+        customSnackbar(message: "Sign In Success", isError: false),
       );
     } on FirebaseAuthException catch (e) {
       String errorMessage = e.code;
@@ -91,7 +91,7 @@ class AuthServices {
         errorMessage = 'Password salah';
       }
       ScaffoldMessenger.of(Get.context!).showSnackBar(
-        customSnackbar(errorMessage),
+        customSnackbar(message: errorMessage),
       );
     } catch (e) {
       return null;

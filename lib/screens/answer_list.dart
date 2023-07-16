@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:lms_app_tugbes/screens/task_assessment.dart';
 import 'package:lms_app_tugbes/services/query_collection.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
-import 'package:lms_app_tugbes/widgets/widget_textfield.dart';
+import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
 
 class AnswerList extends StatelessWidget {
   final String taskCode;
@@ -17,40 +17,14 @@ class AnswerList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(60),
+        child: SizedBox(height: 60),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 52, horizontal: margin),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: blueColor,
-                      ),
-                      child: Icon(
-                        Icons.arrow_back_rounded,
-                        color: whiteColor,
-                        size: 16,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    'Task Assessment',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(),
-                ],
-              ),
-            ),
+            const ButtonBack(title: 'Penilaian'),
             Container(
               margin: EdgeInsets.symmetric(horizontal: margin),
               height: MediaQuery.of(context).size.height * .8,

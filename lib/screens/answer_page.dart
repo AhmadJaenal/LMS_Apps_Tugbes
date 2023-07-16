@@ -5,9 +5,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lms_app_tugbes/screens/page_nilai.dart';
 import 'package:lms_app_tugbes/services/query_collection.dart';
 import 'package:lms_app_tugbes/services/date.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
+import 'package:lms_app_tugbes/screens/pdf_view.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
 
 class AnswerPage extends StatefulWidget {
@@ -15,12 +17,14 @@ class AnswerPage extends StatefulWidget {
   final String email;
   final String deadline;
   final String taskCode;
+  final String fileName;
   const AnswerPage({
     super.key,
     required this.email,
     required this.dsc,
     required this.deadline,
     required this.taskCode,
+    required this.fileName,
   });
 
   @override
@@ -39,9 +43,6 @@ class AnswerPageState extends State<AnswerPage> {
           selectedFileName = file.path.split('/').last;
         });
       }
-      print('File dipilih: ${file.path}');
-    } else {
-      print('Tidak ada file yang dipilih');
     }
   }
 
@@ -66,37 +67,7 @@ class AnswerPageState extends State<AnswerPage> {
               )),
           Column(
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: margin),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: blueColor,
-                        ),
-                        child: Icon(
-                          Icons.arrow_back_rounded,
-                          color: whiteColor,
-                          size: 16,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      'Answer',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(),
-                  ],
-                ),
-              ),
+              const ButtonBack(title: 'Upload Jawaban'),
               const SizedBox(height: 40),
               Container(
                 width: double.infinity,
@@ -152,6 +123,28 @@ class AnswerPageState extends State<AnswerPage> {
                                 .copyWith(color: redColor),
                           )
                         : const SizedBox(),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        SvgPicture.asset('assets/pdf.svg', width: 24),
+                        const SizedBox(width: 16),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(PdfView(fileName: widget.fileName));
+                            downloadFile(
+                                fileUrl: widget.fileName, folder: 'tugas');
+                          },
+                          child: SizedBox(
+                            width: 250,
+                            child: Text(
+                              widget.fileName,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 16),
                     isBeforeNow
                         ? GestureDetector(
@@ -211,10 +204,13 @@ class AnswerPageState extends State<AnswerPage> {
                                 String nis = snapshot.data!['nis'];
                                 return CustomButton(
                                   ontap: () {
-                                    submitAnAnswer(
+                                    if (selectedFileName != 'Upload File') {
+                                      submitAnAnswer(
                                         nameFile: selectedFileName,
                                         nis: nis,
-                                        taskCode: widget.taskCode);
+                                        taskCode: widget.taskCode,
+                                      );
+                                    }
                                   },
                                   titleButton: 'Submit Task',
                                 );
@@ -223,7 +219,14 @@ class AnswerPageState extends State<AnswerPage> {
                               }
                             },
                           )
-                        : const Text('Waktu pengenjaan sudah selesai'),
+                        : const Text('Waktu pengerjaan sudah selesai'),
+                    const SizedBox(height: 16),
+                    CustomButton(
+                      titleButton: 'nilai',
+                      ontap: () {
+                        Get.to(Nilai(taskCode: widget.taskCode));
+                      },
+                    ),
                   ],
                 ),
               ),

@@ -225,19 +225,79 @@ class PopUpLoginRegister extends StatelessWidget {
   }
 }
 
-SnackBar customSnackbar(String errorMessage) {
+SnackBar customSnackbar({String? message, bool isError = true}) {
   return SnackBar(
-    content: Text(
-      errorMessage,
-      style: GoogleFonts.poppins(color: secondaryColor, fontSize: 16),
+    content: Container(
+      width: double.infinity,
+      height: 80,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: whiteColor,
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 50,
+            offset: const Offset(10, 10),
+            color: secondaryColor.withOpacity(.13),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Stack(
+          children: [
+            Positioned(
+              bottom: -20,
+              left: -20,
+              child: Container(
+                width: 70,
+                height: 70,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isError ? redColor : blueColor,
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 30,
+              left: -20,
+              child: Container(
+                width: 70,
+                height: 70,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isError
+                      ? redColor.withOpacity(.7)
+                      : blueColor.withOpacity(.7),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 40,
+              right: -30,
+              child: Container(
+                width: 70,
+                height: 70,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isError
+                      ? redColor.withOpacity(.7)
+                      : blueColor.withOpacity(.7),
+                ),
+              ),
+            ),
+            Center(
+              child: Text(
+                message!,
+                style: GoogleFonts.poppins(color: primaryColor, fontSize: 18),
+              ),
+            ),
+          ],
+        ),
+      ),
     ),
     duration: const Duration(seconds: 3),
     behavior: SnackBarBehavior.floating,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10.0),
-    ),
-    backgroundColor: whiteColor,
-    margin: const EdgeInsets.all(16.0),
-    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+    backgroundColor: Colors.transparent,
+    elevation: 0,
   );
 }

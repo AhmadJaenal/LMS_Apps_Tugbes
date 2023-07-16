@@ -1,5 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 
 class CustomButton extends StatelessWidget {
@@ -111,6 +112,46 @@ class ButtonUploadFile extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ButtonBack extends StatelessWidget {
+  final String title;
+  const ButtonBack({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(margin, 0, margin, 32),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child: Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: blueColor,
+              ),
+              child: Icon(
+                Icons.arrow_back_rounded,
+                color: whiteColor,
+                size: 16,
+              ),
+            ),
+          ),
+          Text(
+            title,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const SizedBox(),
+        ],
       ),
     );
   }

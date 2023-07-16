@@ -85,6 +85,8 @@ class ListModule extends StatelessWidget {
                           String titleModule = snapshot.data![index]['title'];
                           String dscModule = snapshot.data![index]['dsc'];
                           String fileName = snapshot.data![index]['name_file'];
+                          // String urlReferensi =
+                          //     snapshot.data![index]['referensi'];
                           return Padding(
                             padding: index == 0
                                 ? const EdgeInsets.only(top: 0)
@@ -93,6 +95,7 @@ class ListModule extends StatelessWidget {
                               onTap: () {
                                 Get.to(
                                   DetailModule(
+                                    // url: urlReferensi,
                                     dsc: dscModule,
                                     titleModule: titleModule,
                                     fileName: fileName,

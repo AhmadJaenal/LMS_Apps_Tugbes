@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:lms_app_tugbes/animation/fade_animation.dart';
 import 'package:lms_app_tugbes/screens/answer_list.dart';
 import 'package:lms_app_tugbes/screens/answer_page.dart';
-import 'package:lms_app_tugbes/screens/task_assessment.dart';
+import 'package:lms_app_tugbes/screens/page_nilai.dart';
 import 'package:lms_app_tugbes/services/query_collection.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 import 'package:lms_app_tugbes/widgets/card_class.dart';
@@ -13,7 +13,6 @@ import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
 import 'package:lms_app_tugbes/widgets/widget_pop_up.dart';
 import 'package:lms_app_tugbes/widgets/widget_task.dart';
 
-import '../services/refresh.dart';
 import 'list_module.dart';
 
 class Dashboard extends StatefulWidget {
@@ -78,7 +77,7 @@ class _DashboardState extends State<Dashboard> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Welcome back sir',
+                            Text('Selamat datang kembali',
                                 style: Theme.of(context).textTheme.bodySmall),
                             FutureBuilder(
                               future: getUser(
@@ -123,7 +122,7 @@ class _DashboardState extends State<Dashboard> {
                     padding: EdgeInsets.symmetric(horizontal: margin),
                     child: FadeAnimation(
                       offsetX: -100,
-                      childWidget: Text('Your Class',
+                      childWidget: Text('Kelas',
                           style: Theme.of(context).textTheme.titleLarge),
                     ),
                   ),
@@ -150,7 +149,6 @@ class _DashboardState extends State<Dashboard> {
                                 collection: widget.collection),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
-                                Refresh.updateData(true);
                                 QuerySnapshot<Object?> classSnapshot =
                                     snapshot.data!;
                                 return ListView.builder(
@@ -211,92 +209,87 @@ class _DashboardState extends State<Dashboard> {
                       children: [
                         FadeAnimation(
                           offsetX: -50,
-                          childWidget: Text('Task',
+                          childWidget: Text('Daftar Tugas',
                               style: Theme.of(context).textTheme.titleLarge),
-                        ),
-                        FadeAnimation(
-                          offsetX: 50,
-                          childWidget: Text(
-                            'View all',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
-                                .copyWith(color: primaryColor),
-                          ),
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(height: 16),
                   // Refresh.classIsNotEmpty?
-                  SizedBox(
-                    width: double.infinity,
-                    height: 400,
-                    child: StreamBuilder<QuerySnapshot<Object?>>(
-                      stream: getClassStream(
-                        email: widget.email,
-                        collection: widget.collection,
-                      ),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          QuerySnapshot<Object?> classSnapshot = snapshot.data!;
-                          List<String> results = [""];
-                          int lengthClass = classSnapshot.docs.length - 1;
-                          for (int i = 0; i <= lengthClass; i++) {
-                            results.add(classSnapshot.docs[i]['code_kelas']);
-                          }
-                          return StreamBuilder(
-                            stream: getTaskStream(classCodes: results),
-                            builder: (context, snapshot1) {
-                              if (snapshot1.hasData) {
-                                QuerySnapshot<Object?> taskSnapshot =
-                                    snapshot1.data!;
+                  FadeAnimation(
+                    offsetY: 50,
+                    childWidget: SizedBox(
+                      width: double.infinity,
+                      height: 400,
+                      child: StreamBuilder<QuerySnapshot<Object?>>(
+                        stream: getClassStream(
+                          email: widget.email,
+                          collection: widget.collection,
+                        ),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            QuerySnapshot<Object?> classSnapshot =
+                                snapshot.data!;
+                            List<String> results = [""];
+                            int lengthClass = classSnapshot.docs.length - 1;
+                            for (int i = 0; i <= lengthClass; i++) {
+                              results.add(classSnapshot.docs[i]['code_kelas']);
+                            }
+                            return StreamBuilder(
+                              stream: getTaskStream(classCodes: results),
+                              builder: (context, snapshot1) {
+                                if (snapshot1.hasData) {
+                                  QuerySnapshot<Object?> taskSnapshot =
+                                      snapshot1.data!;
 
-                                return ListView.builder(
-                                  itemCount: taskSnapshot.docs.length,
-                                  itemBuilder: (context, index) {
-                                    String dsc =
-                                        taskSnapshot.docs[index]['dsc'];
-                                    String deadline = taskSnapshot.docs[index]
-                                        ['batas_pengumpulan'];
-                                    String fileName =
-                                        taskSnapshot.docs[index]['nama_file'];
-                                    String taskCode =
-                                        taskSnapshot.docs[index]['code_tugas'];
-                                    return CardTask(
-                                      fileName: fileName,
-                                      dsc: dsc,
-                                      timeLine: deadline,
-                                      ontap: () {
-                                        widget.isTeacher
-                                            ? Get.to(AnswerList(
-                                                taskCode: taskCode,
-                                              ))
-                                            : Get.to(
-                                                AnswerPage(
+                                  return ListView.builder(
+                                    itemCount: taskSnapshot.docs.length,
+                                    itemBuilder: (context, index) {
+                                      String dsc =
+                                          taskSnapshot.docs[index]['dsc'];
+                                      String deadline = taskSnapshot.docs[index]
+                                          ['batas_pengumpulan'];
+                                      String fileName =
+                                          taskSnapshot.docs[index]['nama_file'];
+                                      String taskCode = taskSnapshot.docs[index]
+                                          ['code_tugas'];
+                                      return CardTask(
+                                        fileName: fileName,
+                                        dsc: dsc,
+                                        timeLine: deadline,
+                                        ontap: () {
+                                          widget.isTeacher
+                                              ? Get.to(AnswerList(
                                                   taskCode: taskCode,
-                                                  email: widget.email,
-                                                  dsc: dsc,
-                                                  deadline: deadline,
-                                                ),
-                                              );
-                                      },
-                                    );
-                                  },
-                                );
-                              } else {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                            },
-                          );
-                        } else {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                      },
+                                                ))
+                                              : Get.to(
+                                                  AnswerPage(
+                                                    fileName: fileName,
+                                                    taskCode: taskCode,
+                                                    email: widget.email,
+                                                    dsc: dsc,
+                                                    deadline: deadline,
+                                                  ),
+                                                );
+                                        },
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                              },
+                            );
+                          } else {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        },
+                      ),
                     ),
                   ),
                   // : Text("sdsd"),
@@ -344,13 +337,17 @@ class _DashboardState extends State<Dashboard> {
                               email: widget.email,
                             );
                             ScaffoldMessenger.of(Get.context!).showSnackBar(
-                              customSnackbar("Berhasil bergabung kelas"),
+                              customSnackbar(
+                                  message: "Berhasil bergabung kelas",
+                                  isError: false),
                             );
                             codeClassController.text = '';
                           } else {
                             codeClassController.text = '';
                             ScaffoldMessenger.of(Get.context!).showSnackBar(
-                              customSnackbar("Gagal bergabung kelas"),
+                              customSnackbar(
+                                message: "Gagal bergabung kelas",
+                              ),
                             );
                           }
                         });

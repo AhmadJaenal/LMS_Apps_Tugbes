@@ -23,12 +23,14 @@ class AddModuleTeacherState extends State<AddModuleTeacher> {
   final TextEditingController moduleController = TextEditingController();
   final TextEditingController dscController = TextEditingController();
   final TextEditingController titleController = TextEditingController();
+  final TextEditingController urlController = TextEditingController();
   final _formStateModule = GlobalKey<FormState>();
   @override
   void dispose() {
     moduleController.dispose();
     dscController.dispose();
     titleController.dispose();
+    urlController.dispose();
     super.dispose();
   }
 
@@ -97,6 +99,12 @@ class AddModuleTeacherState extends State<AddModuleTeacher> {
                     .copyWith(fontWeight: medium, fontSize: 16),
               ),
               const SizedBox(height: 16),
+              CustomTextfield(
+                controller: urlController,
+                titleTextfield: 'Url',
+                hintText: 'Link youtube sebagai referensi (optional)',
+              ),
+              const SizedBox(height: 16),
               Form(
                 key: _formStateModule,
                 autovalidateMode: AutovalidateMode.always,
@@ -133,6 +141,7 @@ class AddModuleTeacherState extends State<AddModuleTeacher> {
                       ontap: () {
                         if (_formStateModule.currentState!.validate()) {
                           updateMateri(
+                            url: urlController.text,
                             learningCode: widget.learningCode,
                             chapter: moduleController.text,
                             dsc: dscController.text,

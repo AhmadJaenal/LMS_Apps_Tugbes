@@ -3,9 +3,11 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:lms_app_tugbes/widgets/widget_pop_up.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 CollectionReference<Object?> connectToDB(String collection) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -72,16 +74,16 @@ void addTask({String? codeTask, fileName, deadline, classCode, dsc}) async {
         'code_tugas': taskCode,
       });
       ScaffoldMessenger.of(Get.context!).showSnackBar(
-        customSnackbar("Berhasil ditambahkan"),
+        customSnackbar(message: "Berhasil ditambahkan", isError: false),
       );
     } else {
       ScaffoldMessenger.of(Get.context!).showSnackBar(
-        customSnackbar("Gagal ditambahkan"),
+        customSnackbar(message: "Gagal ditambahkan"),
       );
     }
   } catch (e) {
     ScaffoldMessenger.of(Get.context!).showSnackBar(
-      customSnackbar(e.toString()),
+      customSnackbar(message: e.toString()),
     );
   }
 }
@@ -99,18 +101,29 @@ Future<void> uploadFile({String? nameFile, folder, required File file}) async {
 Future<void> downloadFile({String? fileUrl, folder}) async {
   try {
     final storageRef = FirebaseStorage.instance.ref();
-    final file = await storageRef.child("$folder/$fileUrl").getDownloadURL();
-    ScaffoldMessenger.of(Get.context!).showSnackBar(
-      customSnackbar("Download success"),
+    final downloadUrl =
+        await storageRef.child("$folder/$fileUrl").getDownloadURL();
+    final taskId = await FileDownloader.downloadFile(
+      url: downloadUrl,
+      name: fileUrl,
     );
-  } catch (e) {
     ScaffoldMessenger.of(Get.context!).showSnackBar(
-      customSnackbar("Failed success"),
+      customSnackbar(message: "Download success", isError: false),
+    );
+    var status = await Permission.storage.status;
+    if (!status.isDenied || !status.isGranted) {
+      await Permission.storage.request();
+    }
+  } catch (e) {
+    print("Error: ${e.toString()}");
+    ScaffoldMessenger.of(Get.context!).showSnackBar(
+      customSnackbar(message: e.toString()),
     );
   }
 }
 
-void updateMateri({String? learningCode, title, dsc, chapter, nameFile}) async {
+void updateMateri(
+    {String? learningCode, title, dsc, chapter, nameFile, url = ''}) async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference collectionRef = firestore.collection('materi');
   QuerySnapshot querySnapshot =
@@ -121,22 +134,28 @@ void updateMateri({String? learningCode, title, dsc, chapter, nameFile}) async {
       String docId = docSnapshot.id;
 
       List<Map<String, dynamic>> module = [
-        {'module': chapter, 'dsc': dsc, 'title': title, 'name_file': nameFile}
+        {
+          'module': chapter,
+          'dsc': dsc,
+          'title': title,
+          'name_file': nameFile,
+          'url': url
+        }
       ];
       collectionRef.doc(docId).update({
         'list_materi': FieldValue.arrayUnion(module),
       });
       ScaffoldMessenger.of(Get.context!).showSnackBar(
-        customSnackbar("Berhasil ditambahkan"),
+        customSnackbar(message: "Berhasil ditambahkan", isError: false),
       );
     } else {
       ScaffoldMessenger.of(Get.context!).showSnackBar(
-        customSnackbar("Gagal ditambahkan"),
+        customSnackbar(message: "Gagal ditambahkan"),
       );
     }
   } catch (e) {
     ScaffoldMessenger.of(Get.context!).showSnackBar(
-      customSnackbar(e.toString()),
+      customSnackbar(message: e.toString()),
     );
   }
 }
@@ -227,22 +246,22 @@ void submitAnAnswer({String? taskCode, nis, nameFile}) async {
       String docId = docSnapshot.id;
 
       List<Map<String, dynamic>> answerList = [
-        {'nis': nis, 'nama_file': nameFile}
+        {'nis': nis, 'nama_file': nameFile, 'grade': 0}
       ];
       collectionRef.doc(docId).update({
         'jawaban': FieldValue.arrayUnion(answerList),
       });
       ScaffoldMessenger.of(Get.context!).showSnackBar(
-        customSnackbar("Jawaban Berhasil di Submit"),
+        customSnackbar(message: "Berhasil ditambahkan", isError: false),
       );
     } else {
       ScaffoldMessenger.of(Get.context!).showSnackBar(
-        customSnackbar("Jawaban Gagal di Submit"),
+        customSnackbar(message: "Gagal ditambahkan"),
       );
     }
   } catch (e) {
     ScaffoldMessenger.of(Get.context!).showSnackBar(
-      customSnackbar(e.toString()),
+      customSnackbar(message: e.toString()),
     );
   }
 }
@@ -299,24 +318,38 @@ void assessment({String? grade, nis, taskCode, fileName}) {
         'jawaban': existingJawaban,
       }).then((value) {
         ScaffoldMessenger.of(Get.context!).showSnackBar(
-          customSnackbar("Data jawaban berhasil diupdate/menambahkan"),
+          customSnackbar(
+              message: "Data jawaban berhasil diupdate/menambahkan",
+              isError: false),
         );
       }).catchError((error) {
         ScaffoldMessenger.of(Get.context!).showSnackBar(
           customSnackbar(
-              "Terjadi kesalahan saat mengupdate/menambahkan data jawaban"),
+            message:
+                "Terjadi kesalahan saat mengupdate/menambahkan data jawaban",
+          ),
         );
       });
     } else {
       ScaffoldMessenger.of(Get.context!).showSnackBar(
-        customSnackbar("Data tugas tidak ditemukan"),
+        customSnackbar(message: "Data tugas tidak ditemukan"),
       );
     }
   }).catchError((error) {
     ScaffoldMessenger.of(Get.context!).showSnackBar(
-      customSnackbar("Terjadi kesalahan saat mengambil data tugas"),
+      customSnackbar(message: "Terjadi kesalahan saat mengambil data tugas"),
     );
   });
+}
+
+Stream<QuerySnapshot<Object?>> getGrade({String? taskCode}) {
+  try {
+    return connectToDB('tugas')
+        .where('code_tugas', isEqualTo: taskCode)
+        .snapshots();
+  } catch (e) {
+    throw e;
+  }
 }
 
 String generateCode(int length) {
