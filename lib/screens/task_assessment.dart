@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:lms_app_tugbes/screens/pdf_view.dart';
+import 'package:lms_app_tugbes/services/query_collection.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
 import 'package:lms_app_tugbes/widgets/widget_textfield.dart';
@@ -39,34 +43,32 @@ class TaskAssessment extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium!,
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  fileName,
-                  style: Theme.of(context).textTheme.bodyMedium!,
+                Row(
+                  children: [
+                    SvgPicture.asset('assets/pdf.svg', width: 24),
+                    const SizedBox(width: 16),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(PdfView(fileName: fileName));
+                        downloadFile(fileUrl: fileName, folder: 'tugas');
+                      },
+                      child: SizedBox(
+                        width: 250,
+                        child: Text(
+                          fileName,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 TextFieldOnChange(
                   controller: gradeController,
                   fileName: fileName,
                   nis: nis,
                   taskCode: taskCode,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 16),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 50,
-                        offset: const Offset(10, 10),
-                        color: secondaryColor.withOpacity(.13),
-                      ),
-                    ],
-                  ),
-                  height: MediaQuery.of(context).size.height * .6,
-                  // child: SfPdfViewer.network(
-                  //   "https://console.firebase.google.com/project/fir-lms-app/storage/fir-lms-app.appspot.com/tugas/Temp Tugas5.pdf",
-                  //   key: _pdfViewerKey,
-                  // ),
                 ),
               ],
             ),

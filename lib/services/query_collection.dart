@@ -185,9 +185,17 @@ Stream<QuerySnapshot<Object?>> searchDocument(
 }
 
 Future<DocumentSnapshot?> getUser({String? email, collection}) async {
-  QuerySnapshot querySnapshot =
-      await connectToDB(collection).where('email', isEqualTo: email).get();
-  return querySnapshot.docs[0];
+  try {
+    QuerySnapshot querySnapshot =
+        await connectToDB(collection).where('email', isEqualTo: email).get();
+    if (querySnapshot.docs.isNotEmpty) {
+      return querySnapshot.docs[0];
+    } else {
+      return null; // Mengembalikan nilai null jika data tidak ditemukan
+    }
+  } catch (e) {
+    throw e;
+  }
 }
 
 Stream<List<Map<String, dynamic>>> getModule({String? learningCode}) {

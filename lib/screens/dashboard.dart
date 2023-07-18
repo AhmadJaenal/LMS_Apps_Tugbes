@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:lms_app_tugbes/animation/fade_animation.dart';
 import 'package:lms_app_tugbes/screens/answer_list.dart';
 import 'package:lms_app_tugbes/screens/answer_page.dart';
-import 'package:lms_app_tugbes/screens/page_nilai.dart';
 import 'package:lms_app_tugbes/services/query_collection.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 import 'package:lms_app_tugbes/widgets/card_class.dart';
@@ -46,7 +45,6 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     connectToDB('kelas');
-    // getUser(email: widget.email, collection: widget.collection);
     final mediaQueryOfWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
@@ -94,7 +92,7 @@ class _DashboardState extends State<Dashboard> {
                                             .bodyLarge),
                                   );
                                 } else {
-                                  return const SizedBox();
+                                  return const Text('Error');
                                 }
                               },
                             ),
@@ -163,27 +161,57 @@ class _DashboardState extends State<Dashboard> {
                                               ? const EdgeInsets.only(
                                                   right: 24, left: 8)
                                               : const EdgeInsets.only(left: 8),
-                                      child: CardClass(
-                                        className: classSnapshot.docs[index]
-                                            ['nama_kelas'],
-                                        lessonName: classSnapshot.docs[index]
-                                            ['mata_pelajaran'],
-                                        theNumberOfStudent: 21,
-                                        onTap: () {
-                                          String classCode = classSnapshot
-                                              .docs[index]['code_kelas'];
-                                          Get.to(
-                                            ListModule(
-                                              classCode: classCode,
-                                              isTeacher: widget.isTeacher,
-                                              titleClass:
-                                                  classSnapshot.docs[index]
-                                                      ['mata_pelajaran'],
-                                              learningCode: classSnapshot
-                                                  .docs[index]['code_materi'],
-                                            ),
+                                      child: GestureDetector(
+                                        onLongPress: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              String classCode = classSnapshot
+                                                  .docs[index]['code_kelas'];
+                                              return AlertDialog(
+                                                content: Row(
+                                                  children: [
+                                                    Text(
+                                                      'Code kelas',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyMedium,
+                                                    ),
+                                                    const SizedBox(width: 8),
+                                                    SelectableText(
+                                                      classCode,
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyLarge,
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
                                           );
                                         },
+                                        child: CardClass(
+                                          className: classSnapshot.docs[index]
+                                              ['nama_kelas'],
+                                          lessonName: classSnapshot.docs[index]
+                                              ['mata_pelajaran'],
+                                          theNumberOfStudent: 21,
+                                          onTap: () {
+                                            String classCode = classSnapshot
+                                                .docs[index]['code_kelas'];
+                                            Get.to(
+                                              ListModule(
+                                                classCode: classCode,
+                                                isTeacher: widget.isTeacher,
+                                                titleClass:
+                                                    classSnapshot.docs[index]
+                                                        ['mata_pelajaran'],
+                                                learningCode: classSnapshot
+                                                    .docs[index]['code_materi'],
+                                              ),
+                                            );
+                                          },
+                                        ),
                                       ),
                                     );
                                   },
@@ -284,8 +312,8 @@ class _DashboardState extends State<Dashboard> {
                               },
                             );
                           } else {
-                            return const Center(
-                              child: CircularProgressIndicator(),
+                            return Center(
+                              child: const Text('Login tidak sesuai'),
                             );
                           }
                         },
@@ -359,7 +387,7 @@ class _DashboardState extends State<Dashboard> {
               },
             );
           },
-          titleButton: 'Join Class',
+          titleButton: 'Bergabung ke kelas',
         ),
       ),
     );
@@ -425,7 +453,7 @@ class _DashboardState extends State<Dashboard> {
             },
           );
         },
-        titleButton: 'Create Class',
+        titleButton: 'Buat kelas',
       ),
     );
   }
