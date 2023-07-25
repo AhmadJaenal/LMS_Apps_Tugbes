@@ -21,10 +21,6 @@ class Tanggal {
       day = selectedDate.day;
 
       callback?.call(year, month, day);
-
-      print('Tahun: $year');
-      print('Bulan: $month');
-      print('Tanggal: $day');
     }
   }
 }

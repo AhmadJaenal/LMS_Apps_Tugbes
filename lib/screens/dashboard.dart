@@ -150,6 +150,7 @@ class _DashboardState extends State<Dashboard> {
                                 QuerySnapshot<Object?> classSnapshot =
                                     snapshot.data!;
                                 return ListView.builder(
+                                  physics: BouncingScrollPhysics(),
                                   scrollDirection: Axis.horizontal,
                                   itemCount: classSnapshot.docs.length,
                                   itemBuilder: (context, index) {
@@ -236,7 +237,7 @@ class _DashboardState extends State<Dashboard> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         FadeAnimation(
-                          offsetX: -50,
+                          offsetX: -150,
                           childWidget: Text('Daftar Tugas',
                               style: Theme.of(context).textTheme.titleLarge),
                         ),
@@ -246,10 +247,10 @@ class _DashboardState extends State<Dashboard> {
                   const SizedBox(height: 16),
                   // Refresh.classIsNotEmpty?
                   FadeAnimation(
-                    offsetY: 50,
+                    offsetY: 200,
                     childWidget: SizedBox(
                       width: double.infinity,
-                      height: 400,
+                      height: 280,
                       child: StreamBuilder<QuerySnapshot<Object?>>(
                         stream: getClassStream(
                           email: widget.email,
@@ -272,6 +273,7 @@ class _DashboardState extends State<Dashboard> {
                                       snapshot1.data!;
 
                                   return ListView.builder(
+                                    physics: BouncingScrollPhysics(),
                                     itemCount: taskSnapshot.docs.length,
                                     itemBuilder: (context, index) {
                                       String dsc =
@@ -335,7 +337,7 @@ class _DashboardState extends State<Dashboard> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: margin),
       child: FadeAnimation(
-        offsetX: -100,
+        offsetX: -240,
         childWidget: CustomButtonClass(
           onTap: () {
             return showDialog(
@@ -348,9 +350,9 @@ class _DashboardState extends State<Dashboard> {
                     isTeacher: false,
                     classNameC: codeClassController,
                     lessonNameC: codeClassController,
-                    hintText: 'Add link class',
-                    titleButton: 'Join',
-                    titlePopUp: 'Add Class',
+                    hintText: 'Tambahkan Link Kelas',
+                    titleButton: 'Bergabung',
+                    titlePopUp: 'Bergabung ke Kelas',
                     onTap: () {
                       if (_formState.currentState!.validate()) {
                         searchDocument(
@@ -407,9 +409,9 @@ class _DashboardState extends State<Dashboard> {
                   isTeacher: true,
                   classNameC: nameClassController,
                   lessonNameC: lessonNameController,
-                  hintText: 'Add name class',
-                  titleButton: 'Create',
-                  titlePopUp: 'Create Class',
+                  hintText: 'Nama Kelas',
+                  titleButton: 'Buat Kelas',
+                  titlePopUp: 'Buat Kelas Baru',
                   onTap: () {
                     if (_formState.currentState!.validate()) {
                       String codeClass = generateCode(10);
@@ -436,9 +438,9 @@ class _DashboardState extends State<Dashboard> {
                         context: context,
                         builder: (BuildContext context) {
                           return CustomPopUpNotif(
-                            title: 'Success Create Class',
+                            title: 'Pembuatan Kelas Baru Berhasil',
                             desc:
-                                'Classroom has been successfully created share this code to invite others to join',
+                                'Kelas telah berhasil dibuat, bagikan kode ini untuk mengundang orang lain bergabung',
                             icon: 'icon_success.svg',
                             ontap: () {},
                             code: codeClass,

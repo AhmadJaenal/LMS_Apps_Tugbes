@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:lms_app_tugbes/services/query_collection.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
@@ -25,9 +24,13 @@ class Nilai extends StatelessWidget {
             child: StreamBuilder(
               stream: getGrade(taskCode: taskCode),
               builder: (context, snapshot) {
+                print(snapshot.connectionState);
+                if (snapshot.data == null) {
+                  return Center(child: Text('Tidak ada nilai'));
+                }
                 if (snapshot.hasData) {
                   List<dynamic> resultGrade =
-                      snapshot.data!.docs.first.get('jawaban');
+                      snapshot.data?.docs.first.get('jawaban');
                   return ListView.builder(
                     itemCount: resultGrade.length,
                     itemBuilder: (context, index) {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:lms_app_tugbes/services/query_collection.dart';
@@ -25,7 +24,6 @@ class DetailModule extends StatefulWidget {
 }
 
 class _DetailModuleState extends State<DetailModule> {
-  @override
   bool isDownload = false;
   Widget build(BuildContext context) {
     return Scaffold(

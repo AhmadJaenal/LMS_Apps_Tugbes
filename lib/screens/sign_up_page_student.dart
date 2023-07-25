@@ -72,12 +72,12 @@ class _SignUpStudentState extends State<SignUpStudent>
                           offsetY: -100,
                           childWidget: Column(
                             children: [
-                              Text('Welcome back',
+                              Text('Selamat datang',
                                   style:
                                       Theme.of(context).textTheme.titleLarge),
                               const SizedBox(height: 8),
                               Text(
-                                'Sign in as a student',
+                                'Daftar sebagai siswa',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium!
@@ -100,7 +100,7 @@ class _SignUpStudentState extends State<SignUpStudent>
                             childWidget: CustomTextfield(
                               controller: nisController,
                               titleTextfield: 'NIS',
-                              hintText: 'Enter your NIS',
+                              hintText: 'Masukan NIS',
                             ),
                           ),
                         ),
@@ -110,8 +110,8 @@ class _SignUpStudentState extends State<SignUpStudent>
                           child: FadeAnimation(
                             childWidget: CustomTextfield(
                               controller: nameController,
-                              titleTextfield: 'Full Name',
-                              hintText: 'Enter your name',
+                              titleTextfield: 'Nama',
+                              hintText: 'Masukan nama',
                             ),
                           ),
                         ),
@@ -122,7 +122,7 @@ class _SignUpStudentState extends State<SignUpStudent>
                             childWidget: CustomTextfield(
                               controller: emailController,
                               titleTextfield: 'Email',
-                              hintText: 'Enter your email',
+                              hintText: 'Masukan email',
                             ),
                           ),
                         ),
@@ -133,7 +133,7 @@ class _SignUpStudentState extends State<SignUpStudent>
                             childWidget: CustomTextfield(
                               controller: passwordController,
                               titleTextfield: 'Password',
-                              hintText: 'Enter your password',
+                              hintText: 'Masukan password',
                               obsecured: true,
                             ),
                           ),
@@ -145,7 +145,7 @@ class _SignUpStudentState extends State<SignUpStudent>
                             childWidget: CustomTextfield(
                               controller: validationController,
                               titleTextfield: 'Validation password',
-                              hintText: 'Enter your password',
+                              hintText: 'Password',
                               obsecured: true,
                             ),
                           ),
@@ -157,7 +157,7 @@ class _SignUpStudentState extends State<SignUpStudent>
                             offsetY: 50,
                             childWidget: CustomButton(
                               width: double.infinity,
-                              titleButton: 'Sign Up',
+                              titleButton: 'Daftar',
                               ontap: () async {
                                 if (_formState.currentState!.validate()) {
                                   addStudent(
@@ -190,14 +190,14 @@ class _SignUpStudentState extends State<SignUpStudent>
                             },
                             child: RichText(
                               text: TextSpan(
-                                text: 'Sign in as a ',
+                                text: 'Masuk sebagai ',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodySmall!
                                     .copyWith(color: secondaryColor),
                                 children: <TextSpan>[
                                   TextSpan(
-                                    text: 'teacher',
+                                    text: 'Guru',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall!
@@ -221,14 +221,14 @@ class _SignUpStudentState extends State<SignUpStudent>
                             },
                             child: RichText(
                               text: TextSpan(
-                                text: "already have an account! ",
+                                text: "Sudah memiliki akun! ",
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodySmall!
                                     .copyWith(color: secondaryColor),
                                 children: <TextSpan>[
                                   TextSpan(
-                                    text: 'Sign In',
+                                    text: 'Masuk',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall!

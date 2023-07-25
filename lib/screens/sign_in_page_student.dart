@@ -59,12 +59,12 @@ class _SignInStudentState extends State<SignInStudent>
                         childWidget: Column(
                           children: [
                             Text(
-                              'Welcome back',
+                              'Selamat datang',
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Sign in as a student',
+                              'Masuk sebagai siswa',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
@@ -87,7 +87,7 @@ class _SignInStudentState extends State<SignInStudent>
                           childWidget: CustomTextfield(
                             controller: emailController,
                             titleTextfield: 'Email',
-                            hintText: 'Enter your email',
+                            hintText: 'Masukan email',
                           ),
                         ),
                       ),
@@ -98,7 +98,7 @@ class _SignInStudentState extends State<SignInStudent>
                           childWidget: CustomTextfield(
                             controller: passwordController,
                             titleTextfield: 'Password',
-                            hintText: 'Enter your password',
+                            hintText: 'Masukan password',
                             obsecured: true,
                           ),
                         ),
@@ -135,14 +135,14 @@ class _SignInStudentState extends State<SignInStudent>
                                 },
                                 child: RichText(
                                   text: TextSpan(
-                                    text: 'Sign in as a ',
+                                    text: 'Masuk sebagai ',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall!
                                         .copyWith(color: secondaryColor),
                                     children: <TextSpan>[
                                       TextSpan(
-                                        text: 'teacher',
+                                        text: 'Guru',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall!
@@ -163,14 +163,14 @@ class _SignInStudentState extends State<SignInStudent>
                                 },
                                 child: RichText(
                                   text: TextSpan(
-                                    text: "Don't have an account yet? ",
+                                    text: "Belum memiliki akun? ",
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall!
                                         .copyWith(color: secondaryColor),
                                     children: <TextSpan>[
                                       TextSpan(
-                                        text: 'Sign Up',
+                                        text: 'Daftar',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall!

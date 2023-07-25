@@ -32,7 +32,7 @@ class AnswerPage extends StatefulWidget {
 }
 
 class AnswerPageState extends State<AnswerPage> {
-  String selectedFileName = 'Upload File';
+  String selectedFileName = 'Unggah Jawaban';
   Future<void> pickAndUploadFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {
@@ -46,7 +46,6 @@ class AnswerPageState extends State<AnswerPage> {
     }
   }
 
-  @override
   bool isVisible = false;
   Widget build(BuildContext context) {
     TimeRemaining timeRemaining = TimeRemaining();
@@ -67,7 +66,7 @@ class AnswerPageState extends State<AnswerPage> {
               )),
           Column(
             children: [
-              const ButtonBack(title: 'Upload Jawaban'),
+              const ButtonBack(title: 'Unggah Jawaban'),
               const SizedBox(height: 40),
               Container(
                 width: double.infinity,
@@ -89,7 +88,7 @@ class AnswerPageState extends State<AnswerPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Description',
+                      'Deskripsi Tugas',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     const SizedBox(height: 4),
@@ -111,7 +110,7 @@ class AnswerPageState extends State<AnswerPage> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Time remaining',
+                      'Batas Pengumpulan',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     isBeforeNow
@@ -212,7 +211,7 @@ class AnswerPageState extends State<AnswerPage> {
                                       );
                                     }
                                   },
-                                  titleButton: 'Submit Task',
+                                  titleButton: 'Submit',
                                 );
                               } else {
                                 return const Text('Belum bisa upload jawaban');
@@ -222,7 +221,7 @@ class AnswerPageState extends State<AnswerPage> {
                         : const Text('Waktu pengerjaan sudah selesai'),
                     const SizedBox(height: 16),
                     CustomButton(
-                      titleButton: 'nilai',
+                      titleButton: 'Daftar Nilai',
                       ontap: () {
                         Get.to(Nilai(taskCode: widget.taskCode));
                       },

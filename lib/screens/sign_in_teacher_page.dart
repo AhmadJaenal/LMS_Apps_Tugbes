@@ -56,11 +56,11 @@ class _SignInTeacherState extends State<SignInTeacher>
                         offsetY: -100,
                         childWidget: Column(
                           children: [
-                            Text('Welcome back',
+                            Text('Selamat datang',
                                 style: Theme.of(context).textTheme.titleLarge),
                             const SizedBox(height: 8),
                             Text(
-                              'Sign in as a teacher',
+                              'Masuk sebagai guru',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
@@ -83,7 +83,7 @@ class _SignInTeacherState extends State<SignInTeacher>
                           childWidget: CustomTextfield(
                             controller: emailController,
                             titleTextfield: 'Email',
-                            hintText: 'Enter your email',
+                            hintText: 'Masukan email',
                           ),
                         ),
                       ),
@@ -94,7 +94,7 @@ class _SignInTeacherState extends State<SignInTeacher>
                           childWidget: CustomTextfield(
                             controller: passwordController,
                             titleTextfield: 'Password',
-                            hintText: 'Enter your password',
+                            hintText: 'Masukan password',
                             obsecured: true,
                           ),
                         ),
@@ -105,7 +105,7 @@ class _SignInTeacherState extends State<SignInTeacher>
                         child: FadeAnimation(
                           childWidget: CustomButton(
                             width: double.infinity,
-                            titleButton: 'Sign In',
+                            titleButton: 'Masuk',
                             ontap: () {
                               if (_formState.currentState!.validate()) {
                                 AuthServices.signIn(
@@ -132,14 +132,14 @@ class _SignInTeacherState extends State<SignInTeacher>
                           },
                           child: RichText(
                             text: TextSpan(
-                              text: 'Sign in as a ',
+                              text: 'Masuk sebagai  ',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall!
                                   .copyWith(color: secondaryColor),
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: 'student',
+                                  text: 'Siswa',
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall!
@@ -163,14 +163,14 @@ class _SignInTeacherState extends State<SignInTeacher>
                           },
                           child: RichText(
                             text: TextSpan(
-                              text: "Don't have an account yet? ",
+                              text: "Belum memiliki akun? ",
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall!
                                   .copyWith(color: secondaryColor),
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: 'Sign Up',
+                                  text: 'Daftar',
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall!

@@ -141,7 +141,7 @@ class AddTaskPageState extends State<AddTaskPage> {
                                 Tanggal.year;
                               });
                               dateResult =
-                                  "${Tanggal.day.toString()}-${Tanggal.month.toString()}-${Tanggal.year.toString()},${_timeOfDay.format(context).toString()}";
+                                  "${Tanggal.day.toString()}-${Tanggal.month.toString()}-${Tanggal.year.toString()}, ${_timeOfDay.format(context).toString()}";
                             });
                           },
                           child: Text(

@@ -98,13 +98,13 @@ class AddModuleTeacherState extends State<AddModuleTeacher> {
                     .bodyMedium!
                     .copyWith(fontWeight: medium, fontSize: 16),
               ),
-              const SizedBox(height: 16),
-              CustomTextfield(
-                controller: urlController,
-                titleTextfield: 'Url',
-                hintText: 'Link youtube sebagai referensi (optional)',
-              ),
-              const SizedBox(height: 16),
+              // const SizedBox(height: 16),
+              // CustomTextfield(
+              //   controller: urlController,
+              //   titleTextfield: 'Url',
+              //   hintText: 'Link youtube sebagai referensi (optional)',
+              // ),
+              // const SizedBox(height: 16),
               Form(
                 key: _formStateModule,
                 autovalidateMode: AutovalidateMode.always,
@@ -113,19 +113,19 @@ class AddModuleTeacherState extends State<AddModuleTeacher> {
                   children: [
                     CustomTextfield(
                       controller: moduleController,
-                      titleTextfield: 'Module',
+                      titleTextfield: 'Jumlah Pertemuan',
                       hintText: 'Pertemuan ke-',
                     ),
                     const SizedBox(height: 16),
                     CustomTextfield(
                       controller: dscController,
-                      titleTextfield: 'Description',
+                      titleTextfield: 'Deskripsi',
                       hintText: 'Pelajari materi berikut',
                     ),
                     const SizedBox(height: 16),
                     CustomTextfield(
                       controller: titleController,
-                      titleTextfield: 'Title Module',
+                      titleTextfield: 'Judul Materi',
                       hintText: 'Matriks dan Determinan',
                     ),
                     const SizedBox(height: 16),
@@ -151,7 +151,7 @@ class AddModuleTeacherState extends State<AddModuleTeacher> {
                           Get.back();
                         }
                       },
-                      titleButton: 'Upload',
+                      titleButton: 'Unggah',
                     ),
                   ],
                 ),

@@ -23,7 +23,7 @@ class _FadeAnimationState extends State<FadeAnimation>
   @override
   void initState() {
     animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 1500));
+        vsync: this, duration: const Duration(milliseconds: 1000));
     animation = Tween<double>(begin: 0, end: 1).animate(animationController);
     animationController.forward();
 

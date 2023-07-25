@@ -103,7 +103,7 @@ Future<void> downloadFile({String? fileUrl, folder}) async {
     final storageRef = FirebaseStorage.instance.ref();
     final downloadUrl =
         await storageRef.child("$folder/$fileUrl").getDownloadURL();
-    final taskId = await FileDownloader.downloadFile(
+    await FileDownloader.downloadFile(
       url: downloadUrl,
       name: fileUrl,
     );
@@ -253,15 +253,38 @@ void submitAnAnswer({String? taskCode, nis, nameFile}) async {
       DocumentSnapshot docSnapshot = querySnapshot.docs.first;
       String docId = docSnapshot.id;
 
-      List<Map<String, dynamic>> answerList = [
-        {'nis': nis, 'nama_file': nameFile, 'grade': 0}
-      ];
-      collectionRef.doc(docId).update({
-        'jawaban': FieldValue.arrayUnion(answerList),
-      });
-      ScaffoldMessenger.of(Get.context!).showSnackBar(
-        customSnackbar(message: "Berhasil ditambahkan", isError: false),
-      );
+      // Periksa apakah NIP sudah ada di dalam array 'jawaban'
+      List<dynamic> existingJawaban = docSnapshot.get('jawaban');
+      bool isNisExist = existingJawaban.any((jawaban) => jawaban['nis'] == nis);
+
+      if (isNisExist) {
+        // NIP sudah ada, lakukan update data jawaban
+        List<Map<String, dynamic>> updatedJawaban =
+            List<Map<String, dynamic>>.from(existingJawaban);
+        for (var jawaban in updatedJawaban) {
+          if (jawaban['nis'] == nis) {
+            jawaban['nama_file'] = nameFile;
+          }
+        }
+
+        collectionRef.doc(docId).update({
+          'jawaban': updatedJawaban,
+        });
+        ScaffoldMessenger.of(Get.context!).showSnackBar(
+          customSnackbar(message: "Berhasil diupdate", isError: false),
+        );
+      } else {
+        // NIP belum ada, tambahkan data jawaban baru
+        List<Map<String, dynamic>> answerList = [
+          {'nis': nis, 'nama_file': nameFile, 'grade': "0"}
+        ];
+        collectionRef.doc(docId).update({
+          'jawaban': FieldValue.arrayUnion(answerList),
+        });
+        ScaffoldMessenger.of(Get.context!).showSnackBar(
+          customSnackbar(message: "Berhasil ditambahkan", isError: false),
+        );
+      }
     } else {
       ScaffoldMessenger.of(Get.context!).showSnackBar(
         customSnackbar(message: "Gagal ditambahkan"),
@@ -326,9 +349,7 @@ void assessment({String? grade, nis, taskCode, fileName}) {
         'jawaban': existingJawaban,
       }).then((value) {
         ScaffoldMessenger.of(Get.context!).showSnackBar(
-          customSnackbar(
-              message: "Data jawaban berhasil diupdate/menambahkan",
-              isError: false),
+          customSnackbar(message: "Berhasil Update", isError: false),
         );
       }).catchError((error) {
         ScaffoldMessenger.of(Get.context!).showSnackBar(
@@ -356,7 +377,9 @@ Stream<QuerySnapshot<Object?>> getGrade({String? taskCode}) {
         .where('code_tugas', isEqualTo: taskCode)
         .snapshots();
   } catch (e) {
-    throw e;
+    print('Error: $e');
+    // Return an empty stream instead of null
+    return Stream.empty();
   }
 }
 

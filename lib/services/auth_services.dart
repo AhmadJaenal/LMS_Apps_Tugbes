@@ -18,25 +18,30 @@ class AuthServices {
   }) async {
     try {
       if (password == validate) {
-        final credential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email!,
           password: password,
         );
         ScaffoldMessenger.of(Get.context!).showSnackBar(
           customSnackbar(message: "Sign Up Success", isError: false),
         );
-        Get.off(NavBarMenu(
-          pageOption: [
-            Dashboard(
-              email: email,
-              collection: collection,
-              isTeacher: isTeacher,
-            ),
-            ListClassPage(email: email, collection: collection),
-            ProfilePage(email: email),
-          ],
-        ));
+
+        Get.off(
+          NavBarMenu(
+            pageOption: [
+              Dashboard(
+                email: email,
+                collection: collection,
+                isTeacher: isTeacher,
+              ),
+              ListClassPage(
+                  email: email, collection: collection, isTeacher: isTeacher),
+              ProfilePage(email: email),
+            ],
+          ),
+          transition: Transition.fade,
+          duration: const Duration(seconds: 1),
+        );
       } else {
         ScaffoldMessenger.of(Get.context!).showSnackBar(
           customSnackbar(message: "Password tidak sama"),
@@ -64,21 +69,26 @@ class AuthServices {
   static Future signIn(
       {String? email, password, collection, bool isTeacher = false}) async {
     try {
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email!,
         password: password,
       );
-      Get.off(NavBarMenu(
-        pageOption: [
-          Dashboard(
-            email: email,
-            collection: collection,
-            isTeacher: isTeacher,
-          ),
-          ListClassPage(email: email, collection: collection),
-          ProfilePage(email: email),
-        ],
-      ));
+      Get.off(
+        NavBarMenu(
+          pageOption: [
+            Dashboard(
+              email: email,
+              collection: collection,
+              isTeacher: isTeacher,
+            ),
+            ListClassPage(
+                email: email, collection: collection, isTeacher: isTeacher),
+            ProfilePage(email: email),
+          ],
+        ),
+        transition: Transition.fade,
+        duration: const Duration(seconds: 1),
+      );
       ScaffoldMessenger.of(Get.context!).showSnackBar(
         customSnackbar(message: "Sign In Success", isError: false),
       );

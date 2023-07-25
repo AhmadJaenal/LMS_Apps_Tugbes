@@ -51,13 +51,13 @@ class CustomPopUp extends StatelessWidget {
               ),
               CustomTextfield(
                 controller: classNameC,
-                hintText: 'Add class name',
+                hintText: hintText,
                 titleTextfield: '',
               ),
               isTeacher
                   ? CustomTextfield(
                       controller: lessonNameC,
-                      hintText: 'Add lesson name',
+                      hintText: 'Mata Pelajaran',
                       titleTextfield: '',
                     )
                   : const SizedBox(),
