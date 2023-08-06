@@ -24,18 +24,17 @@ class Nilai extends StatelessWidget {
             child: StreamBuilder(
               stream: getGrade(taskCode: taskCode),
               builder: (context, snapshot) {
-                print(snapshot.connectionState);
                 if (snapshot.data == null) {
                   return Center(child: Text('Tidak ada nilai'));
                 }
+                debugPrint("hasil: ${snapshot.data}");
+
                 if (snapshot.hasData) {
-                  List<dynamic> resultGrade =
-                      snapshot.data?.docs.first.get('jawaban');
                   return ListView.builder(
-                    itemCount: resultGrade.length,
+                    itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
-                      String nis = resultGrade[index]['nis'];
-                      String nilai = resultGrade[index]['grade'];
+                      String nis = snapshot.data![index]['nis'];
+                      String nilai = snapshot.data![index]['grade'];
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

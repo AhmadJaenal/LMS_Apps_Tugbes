@@ -32,17 +32,22 @@ class AnswerPage extends StatefulWidget {
 }
 
 class AnswerPageState extends State<AnswerPage> {
-  String selectedFileName = 'Unggah Jawaban';
-  Future<void> pickAndUploadFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+  String selectedFileName = 'Upload File';
+  Future<void> pickAndUploadFile({String? folder}) async {
+    // FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+    late File file;
     if (result != null) {
-      File file = File(result.files.single.path!);
-
+      file = File(result.files.single.path!);
       if (mounted) {
         setState(() {
           selectedFileName = file.path.split('/').last;
         });
       }
+      uploadFile(nameFile: selectedFileName, file: file, folder: folder);
     }
   }
 
@@ -130,8 +135,6 @@ class AnswerPageState extends State<AnswerPage> {
                         GestureDetector(
                           onTap: () {
                             Get.to(PdfView(fileName: widget.fileName));
-                            downloadFile(
-                                fileUrl: widget.fileName, folder: 'tugas');
                           },
                           child: SizedBox(
                             width: 250,
@@ -203,6 +206,7 @@ class AnswerPageState extends State<AnswerPage> {
                                 String nis = snapshot.data!['nis'];
                                 return CustomButton(
                                   ontap: () {
+                                    print('diclik');
                                     if (selectedFileName != 'Upload File') {
                                       submitAnAnswer(
                                         nameFile: selectedFileName,

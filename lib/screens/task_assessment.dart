@@ -49,7 +49,6 @@ class TaskAssessment extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         Get.to(PdfView(fileName: fileName));
-                        downloadFile(fileUrl: fileName, folder: 'tugas');
                       },
                       child: SizedBox(
                         width: 250,

@@ -126,7 +126,7 @@ class _DetailModuleState extends State<DetailModule> {
                 const SizedBox(width: 16),
                 GestureDetector(
                   onTap: () {
-                    downloadFile(fileUrl: widget.fileName, folder: 'materi');
+                    Get.to(PdfView(fileName: widget.fileName));
                   },
                   child: SizedBox(
                     width: 250,

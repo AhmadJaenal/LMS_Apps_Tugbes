@@ -88,7 +88,7 @@ void addTask({String? codeTask, fileName, deadline, classCode, dsc}) async {
     'nama_file': fileName,
     'batas_pengumpulan': deadline,
     'code_kelas': classCode,
-    'jawaban': {},
+    'jawaban': [],
   });
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference collectionRef = firestore.collection('kelas');
@@ -135,8 +135,12 @@ Future<void> downloadFile({String? fileUrl, folder}) async {
         await storageRef.child("$folder/$fileUrl").getDownloadURL();
     await FileDownloader.downloadFile(
       url: downloadUrl,
+      // onDownloadCompleted: (path) {
+      //   Get.to(PdfView(fileName: fileUrl!));
+      // },
       name: fileUrl,
     );
+
     ScaffoldMessenger.of(Get.context!).showSnackBar(
       customSnackbar(message: "Download success", isError: false),
     );
@@ -144,7 +148,6 @@ Future<void> downloadFile({String? fileUrl, folder}) async {
     if (!status.isDenied || !status.isGranted) {
       await Permission.storage.request();
     }
-    Get.to(PdfView(fileName: fileUrl!));
   } catch (e) {
     print("Error: ${e.toString()}");
     ScaffoldMessenger.of(Get.context!).showSnackBar(
@@ -284,18 +287,19 @@ void submitAnAnswer({String? taskCode, nis, nameFile}) async {
       DocumentSnapshot docSnapshot = querySnapshot.docs.first;
       String docId = docSnapshot.id;
 
-      // Periksa apakah NIP sudah ada di dalam array 'jawaban'
+      // Periksa apakah NIS sudah ada di dalam array 'jawaban'
       List<dynamic> existingJawaban = docSnapshot.get('jawaban');
       bool isNisExist = existingJawaban.any((jawaban) => jawaban['nis'] == nis);
 
       if (isNisExist) {
-        // NIP sudah ada, lakukan update data jawaban
+        // NIS sudah ada, lakukan update data jawaban
         List<Map<String, dynamic>> updatedJawaban =
             List<Map<String, dynamic>>.from(existingJawaban);
-        for (var jawaban in updatedJawaban) {
-          if (jawaban['nis'] == nis) {
-            jawaban['nama_file'] = nameFile;
-          }
+        int index =
+            updatedJawaban.indexWhere((jawaban) => jawaban['nis'] == nis);
+        print("index $index");
+        if (index != -1) {
+          updatedJawaban[index]['nama_file'] = nameFile;
         }
 
         collectionRef.doc(docId).update({
@@ -305,12 +309,14 @@ void submitAnAnswer({String? taskCode, nis, nameFile}) async {
           customSnackbar(message: "Berhasil diupdate", isError: false),
         );
       } else {
-        // NIP belum ada, tambahkan data jawaban baru
-        List<Map<String, dynamic>> answerList = [
-          {'nis': nis, 'nama_file': nameFile, 'grade': "0"}
-        ];
+        // NIS belum ada, tambahkan data jawaban baru
+        Map<String, dynamic> newAnswer = {
+          'nis': nis,
+          'nama_file': nameFile,
+          'grade': "0",
+        };
         collectionRef.doc(docId).update({
-          'jawaban': FieldValue.arrayUnion(answerList),
+          'jawaban': FieldValue.arrayUnion([newAnswer]),
         });
         ScaffoldMessenger.of(Get.context!).showSnackBar(
           customSnackbar(message: "Berhasil ditambahkan", isError: false),
@@ -322,9 +328,7 @@ void submitAnAnswer({String? taskCode, nis, nameFile}) async {
       );
     }
   } catch (e) {
-    ScaffoldMessenger.of(Get.context!).showSnackBar(
-      customSnackbar(message: e.toString()),
-    );
+    print("error: ${e.hashCode}");
   }
 }
 
@@ -449,16 +453,28 @@ void daftarNilai({String? taskCode, nis, grade}) async {
   }
 }
 
-Stream<QuerySnapshot<Object?>> getGrade({String? taskCode}) {
-  try {
-    return connectToDB('tugas')
-        .where('code_tugas', isEqualTo: taskCode)
-        .snapshots();
-  } catch (e) {
-    print('Error: $e');
-    // Return an empty stream instead of null
-    return Stream.empty();
-  }
+// Stream<QuerySnapshot<Object?>> getGrade({String? taskCode}) {
+//   try {
+//     return connectToDB('nilai')
+//         .where('code_tugas', isEqualTo: taskCode)
+//         .snapshots();
+//   } catch (e) {
+//     print('Error: $e');
+//   }
+// }
+
+Stream<List<Map<String, dynamic>>> getGrade({String? taskCode}) {
+  return connectToDB('tugas')
+      .where('code_tugas', isEqualTo: taskCode)
+      .snapshots()
+      .map((querySnapshot) {
+    List<Map<String, dynamic>> results = [];
+    if (querySnapshot.docs.isNotEmpty) {
+      final listJawaban = querySnapshot.docs.first;
+      results = List<Map<String, dynamic>>.from(listJawaban.get('jawaban'));
+    }
+    return results;
+  });
 }
 
 String generateCode(int length) {
