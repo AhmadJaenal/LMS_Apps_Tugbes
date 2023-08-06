@@ -49,7 +49,11 @@ class AddTaskPageState extends State<AddTaskPage> {
 
   String selectedFileName = 'Upload File';
   Future<void> pickAndUploadFile({String? folder}) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    // FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
     late File file;
     if (result != null) {
       file = File(result.files.single.path!);

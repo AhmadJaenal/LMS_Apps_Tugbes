@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lms_app_tugbes/services/query_collection.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 
@@ -34,6 +35,9 @@ class CustomTextfield extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           TextFormField(
+            // inputFormatters: [
+            //   LengthLimitingTextInputFormatter(50),
+            // ],
             validator: (value) {
               if (value == "") {
                 return "input data correctly";
@@ -96,16 +100,26 @@ class TextFieldOnChange extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFormField(
+            // inputFormatters: [
+            //   LengthLimitingTextInputFormatter(2),
+            // ],
+            // keyboardType: TextInputType.number,
             onChanged: (value) {
               assessment(
-                  grade: controller.text,
-                  nis: nis,
-                  taskCode: taskCode,
-                  fileName: fileName);
+                grade: controller.text,
+                nis: nis,
+                taskCode: taskCode,
+                fileName: fileName,
+              );
+              daftarNilai(
+                nis: nis,
+                taskCode: taskCode,
+                grade: controller.text,
+              );
             },
             validator: (value) {
               if (value == "") {
-                return "input data correctly";
+                return "Data tidak boleh kosong";
               }
             },
             controller: controller,

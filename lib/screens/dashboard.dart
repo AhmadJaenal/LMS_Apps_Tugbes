@@ -8,10 +8,12 @@ import 'package:lms_app_tugbes/screens/answer_page.dart';
 import 'package:lms_app_tugbes/services/query_collection.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 import 'package:lms_app_tugbes/widgets/card_class.dart';
+// import 'package:lms_app_tugbes/widgets/qr_scanner.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
 import 'package:lms_app_tugbes/widgets/widget_pop_up.dart';
 import 'package:lms_app_tugbes/widgets/widget_task.dart';
 
+// import '../widgets/qr_widget.dart';
 import 'list_module.dart';
 
 class Dashboard extends StatefulWidget {
@@ -98,15 +100,76 @@ class _DashboardState extends State<Dashboard> {
                             ),
                           ],
                         ),
-                        Container(
-                          width: 38,
-                          height: 38,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: blueColor,
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Transform.translate(
+                                  offset: const Offset(0, -260),
+                                  child: Dialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(20),
+                                        bottomRight: Radius.circular(20),
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(2),
+                                      ),
+                                    ),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12, vertical: 10),
+                                      height: 100,
+                                      decoration: BoxDecoration(),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Bantuan',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.share,
+                                                color: secondaryColor
+                                                    .withOpacity(.9),
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Container(
+                                                width: 200,
+                                                margin: const EdgeInsets.all(8),
+                                                child: Text(
+                                                  'Tekan kelas yang ingin anda bagian',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall,
+                                                  maxLines: 2,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: Container(
+                            width: 38,
+                            height: 38,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: blueColor,
+                            ),
+                            child: Icon(Icons.question_mark_rounded,
+                                color: whiteColor, size: 16, weight: 5),
                           ),
-                          child: Icon(Icons.person_outline_rounded,
-                              color: whiteColor, size: 14, weight: 3),
                         ),
                       ],
                     ),
@@ -169,6 +232,8 @@ class _DashboardState extends State<Dashboard> {
                                             builder: (BuildContext context) {
                                               String classCode = classSnapshot
                                                   .docs[index]['code_kelas'];
+                                              String nameClass = classSnapshot
+                                                  .docs[index]['nama_kelas'];
                                               return AlertDialog(
                                                 content: Row(
                                                   children: [
@@ -185,6 +250,22 @@ class _DashboardState extends State<Dashboard> {
                                                           .textTheme
                                                           .bodyLarge,
                                                     ),
+                                                    const SizedBox(width: 8),
+                                                    // GestureDetector(
+                                                    //     onTap: () {
+                                                    //       showDialog(
+                                                    //         context: context,
+                                                    //         builder: (context) {
+                                                    //           return AlertDialog(
+                                                    //             content: QRCode(
+                                                    //                 code:
+                                                    //                     classCode),
+                                                    //           );
+                                                    //         },
+                                                    //       );
+                                                    //     },
+                                                    //     child: Icon(
+                                                    //         Icons.qr_code)),
                                                   ],
                                                 ),
                                               );
@@ -338,58 +419,101 @@ class _DashboardState extends State<Dashboard> {
       padding: EdgeInsets.symmetric(horizontal: margin),
       child: FadeAnimation(
         offsetX: -240,
-        childWidget: CustomButtonClass(
-          onTap: () {
-            return showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Form(
-                  autovalidateMode: AutovalidateMode.always,
-                  key: _formState,
-                  child: CustomPopUp(
-                    isTeacher: false,
-                    classNameC: codeClassController,
-                    lessonNameC: codeClassController,
-                    hintText: 'Tambahkan Link Kelas',
-                    titleButton: 'Bergabung',
-                    titlePopUp: 'Bergabung ke Kelas',
-                    onTap: () {
-                      if (_formState.currentState!.validate()) {
-                        searchDocument(
-                                nameCollection: 'kelas',
-                                data: 'code_kelas',
-                                searchQuery: codeClassController.text)
-                            .listen((snapshot) {
-                          if (snapshot.docs.isNotEmpty) {
-                            updateClass(
-                              codeClass: codeClassController.text,
-                              collection: 'siswa',
-                              email: widget.email,
-                            );
-                            ScaffoldMessenger.of(Get.context!).showSnackBar(
-                              customSnackbar(
-                                  message: "Berhasil bergabung kelas",
-                                  isError: false),
-                            );
-                            codeClassController.text = '';
-                          } else {
-                            codeClassController.text = '';
-                            ScaffoldMessenger.of(Get.context!).showSnackBar(
-                              customSnackbar(
-                                message: "Gagal bergabung kelas",
-                              ),
-                            );
-                          }
-                        });
-                        Get.back();
-                      }
-                    },
-                  ),
+        childWidget: Row(
+          children: [
+            CustomButtonClass(
+              onTap: () {
+                return showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return FutureBuilder(
+                      future: getUser(collection: 'siswa', email: widget.email),
+                      builder: (context, snapshotUser) {
+                        if (snapshotUser.hasData) {
+                          String nis = snapshotUser.data!['nis'];
+                          return Form(
+                            autovalidateMode: AutovalidateMode.always,
+                            key: _formState,
+                            child: CustomPopUp(
+                              isTeacher: false,
+                              classNameC: codeClassController,
+                              lessonNameC: codeClassController,
+                              hintText: 'Tambahkan Link Kelas',
+                              titleButton: 'Bergabung',
+                              titlePopUp: 'Bergabung ke Kelas',
+                              onTap: () {
+                                if (_formState.currentState!.validate()) {
+                                  searchDocument(
+                                          nameCollection: 'kelas',
+                                          data: 'code_kelas',
+                                          searchQuery: codeClassController.text)
+                                      .listen((snapshot) {
+                                    if (snapshot.docs.isNotEmpty) {
+                                      addListStudent(
+                                          codeClass: codeClassController.text,
+                                          nis: nis);
+                                      updateClass(
+                                        codeClass: codeClassController.text,
+                                        collection: 'siswa',
+                                        email: widget.email,
+                                      );
+                                      ScaffoldMessenger.of(Get.context!)
+                                          .showSnackBar(
+                                        customSnackbar(
+                                            message: "Berhasil bergabung kelas",
+                                            isError: false),
+                                      );
+                                      codeClassController.text = '';
+                                    } else {
+                                      codeClassController.text = '';
+                                      ScaffoldMessenger.of(Get.context!)
+                                          .showSnackBar(
+                                        customSnackbar(
+                                          message: "Gagal bergabung kelas",
+                                        ),
+                                      );
+                                    }
+                                  });
+                                  Get.back();
+                                }
+                              },
+                            ),
+                          );
+                        } else {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                      },
+                    );
+                  },
                 );
               },
-            );
-          },
-          titleButton: 'Bergabung ke kelas',
+              titleButton: 'Bergabung ke kelas',
+            ),
+            const SizedBox(width: 8),
+            // FutureBuilder(
+            //   future:
+            //       getUser(collection: widget.collection, email: widget.email),
+            //   builder: (context, snapshot) {
+            //     return GestureDetector(
+            //         onTap: () {
+            //           if (snapshot.hasData) {
+            //             showDialog(
+            //               context: context,
+            //               builder: (BuildContext context) {
+            //                 return QRScanner(
+            //                   nis: snapshot.data!['nis'],
+            //                   email: widget.email,
+            //                 );
+            //               },
+            //             );
+            //           } else {
+            //             Text('Terdapat Error');
+            //           }
+            //         },
+            //         child: Icon(Icons.qr_code_scanner_outlined));
+            //   },
+            // ),
+          ],
         ),
       ),
     );
@@ -430,6 +554,10 @@ class _DashboardState extends State<Dashboard> {
                         email: widget.email,
                       );
                       createMateri(
+                        learningCode: learningCode,
+                      );
+                      createKM(
+                        codeClass: codeClass,
                         learningCode: learningCode,
                       );
                       nameClassController.text = "";

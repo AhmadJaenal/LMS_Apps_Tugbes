@@ -26,13 +26,13 @@ class ProfilePage extends StatelessWidget {
               child: Icon(Icons.person_outline_rounded,
                   color: whiteColor, size: 24, weight: 3),
             ),
+            const SizedBox(height: 32),
             FutureBuilder(
               future: getUser(collection: 'siswa', email: email),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Column(
                     children: [
-                      const SizedBox(height: 32),
                       Text(
                         snapshot.data!['nama'],
                         style: Theme.of(context).textTheme.bodyMedium,
@@ -42,7 +42,6 @@ class ProfilePage extends StatelessWidget {
                         snapshot.data!['nis'],
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
-                      const SizedBox(height: 50),
                     ],
                   );
                 } else {
@@ -50,6 +49,7 @@ class ProfilePage extends StatelessWidget {
                 }
               },
             ),
+            const SizedBox(height: 50),
             CustomButton(
               titleButton: 'Keluar',
               ontap: () {

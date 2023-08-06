@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:lms_app_tugbes/screens/pdf_view.dart';
 import 'package:lms_app_tugbes/widgets/widget_pop_up.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -49,6 +50,35 @@ void createMateri({String? learningCode}) {
     'code_materi': learningCode,
     'list_materi': [],
   });
+}
+
+void createKM({String? codeClass, learningCode}) {
+  connectToDB('kelas_materi').add({
+    'code_kelas': codeClass,
+    'code_materi': learningCode,
+  });
+}
+
+void addListStudent({String? codeClass, nis}) async {
+  try {
+    CollectionReference classRef = connectToDB('kelas_siswa');
+    QuerySnapshot querySnapshot =
+        await classRef.where('code_kelas', isEqualTo: codeClass).get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot docSnapshot = querySnapshot.docs.first;
+      await docSnapshot.reference.update({
+        'daftar_siswa': FieldValue.arrayUnion([nis]),
+      });
+    } else {
+      await classRef.add({
+        'code_kelas': codeClass,
+        'daftar_siswa': [nis],
+      });
+    }
+  } catch (e) {
+    print('Error: $e');
+  }
 }
 
 void addTask({String? codeTask, fileName, deadline, classCode, dsc}) async {
@@ -114,6 +144,7 @@ Future<void> downloadFile({String? fileUrl, folder}) async {
     if (!status.isDenied || !status.isGranted) {
       await Permission.storage.request();
     }
+    Get.to(PdfView(fileName: fileUrl!));
   } catch (e) {
     print("Error: ${e.toString()}");
     ScaffoldMessenger.of(Get.context!).showSnackBar(
@@ -369,6 +400,53 @@ void assessment({String? grade, nis, taskCode, fileName}) {
       customSnackbar(message: "Terjadi kesalahan saat mengambil data tugas"),
     );
   });
+}
+
+void daftarNilai({String? taskCode, nis, grade}) async {
+  try {
+    CollectionReference nilaiRef = connectToDB('nilai');
+    QuerySnapshot querySnapshot =
+        await nilaiRef.where('code_tugas', isEqualTo: taskCode).get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot docSnapshot = querySnapshot.docs.first;
+      List<Map<String, dynamic>> existingDaftarNilai =
+          List<Map<String, dynamic>>.from(docSnapshot.get('daftar_nilai'));
+
+      bool isNisExist = false;
+      int existingIndex = 0;
+      for (int i = 0; i < existingDaftarNilai.length; i++) {
+        if (existingDaftarNilai[i]['nis'] == nis) {
+          isNisExist = true;
+          existingIndex = i;
+          break;
+        }
+      }
+
+      if (isNisExist) {
+        existingDaftarNilai[existingIndex]['nilai'] = grade;
+
+        await docSnapshot.reference.update({
+          'daftar_nilai': existingDaftarNilai,
+        });
+      } else {
+        existingDaftarNilai.add({'nis': nis, 'nilai': grade});
+
+        await docSnapshot.reference.update({
+          'daftar_nilai': existingDaftarNilai,
+        });
+      }
+    } else {
+      await nilaiRef.add({
+        'code_tugas': taskCode,
+        'daftar_nilai': [
+          {'nis': nis, 'nilai': grade},
+        ],
+      });
+    }
+  } catch (e) {
+    print('Error: $e');
+  }
 }
 
 Stream<QuerySnapshot<Object?>> getGrade({String? taskCode}) {

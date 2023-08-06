@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lms_app_tugbes/screens/add_task.dart';
@@ -22,6 +23,21 @@ class ListModule extends StatelessWidget {
     required this.classCode,
     this.isTeacher = false,
   });
+  void initState() {
+    // Mengatur preferensi orientasi layar
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp, // Potrait mode
+      DeviceOrientation.landscapeLeft, // Landscape mode
+      DeviceOrientation.landscapeRight, // Landscape mode
+    ]);
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +101,7 @@ class ListModule extends StatelessWidget {
                           String titleModule = snapshot.data![index]['title'];
                           String dscModule = snapshot.data![index]['dsc'];
                           String fileName = snapshot.data![index]['name_file'];
+                          String url = snapshot.data![index]['url'];
                           // String urlReferensi =
                           //     snapshot.data![index]['referensi'];
                           return Padding(
@@ -95,7 +112,7 @@ class ListModule extends StatelessWidget {
                               onTap: () {
                                 Get.to(
                                   DetailModule(
-                                    // url: urlReferensi,
+                                    url: url,
                                     dsc: dscModule,
                                     titleModule: titleModule,
                                     fileName: fileName,

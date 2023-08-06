@@ -36,7 +36,11 @@ class AddModuleTeacherState extends State<AddModuleTeacher> {
 
   String selectedFileName = 'Upload File';
   Future<void> pickAndUploadFile({String? folder}) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    // FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
     late File file;
     if (result != null) {
       file = File(result.files.single.path!);
@@ -98,13 +102,13 @@ class AddModuleTeacherState extends State<AddModuleTeacher> {
                     .bodyMedium!
                     .copyWith(fontWeight: medium, fontSize: 16),
               ),
-              // const SizedBox(height: 16),
-              // CustomTextfield(
-              //   controller: urlController,
-              //   titleTextfield: 'Url',
-              //   hintText: 'Link youtube sebagai referensi (optional)',
-              // ),
-              // const SizedBox(height: 16),
+              const SizedBox(height: 16),
+              CustomTextfield(
+                controller: urlController,
+                titleTextfield: 'Url',
+                hintText: 'Link youtube sebagai referensi (optional)',
+              ),
+              const SizedBox(height: 16),
               Form(
                 key: _formStateModule,
                 autovalidateMode: AutovalidateMode.always,
