@@ -35,9 +35,9 @@ class CustomTextfield extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           TextFormField(
-            // inputFormatters: [
-            //   LengthLimitingTextInputFormatter(50),
-            // ],
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(50),
+            ],
             validator: (value) {
               if (value == "") {
                 return "input data correctly";
@@ -100,10 +100,10 @@ class TextFieldOnChange extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFormField(
-            // inputFormatters: [
-            //   LengthLimitingTextInputFormatter(2),
-            // ],
-            // keyboardType: TextInputType.number,
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(2),
+            ],
+            keyboardType: TextInputType.number,
             onChanged: (value) {
               assessment(
                 grade: controller.text,

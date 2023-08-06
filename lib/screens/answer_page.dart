@@ -134,7 +134,10 @@ class AnswerPageState extends State<AnswerPage> {
                         const SizedBox(width: 16),
                         GestureDetector(
                           onTap: () {
-                            Get.to(PdfView(fileName: widget.fileName));
+                            Get.to(PdfView(
+                              fileName: widget.fileName,
+                              folderDownload: 'tugas',
+                            ));
                           },
                           child: SizedBox(
                             width: 250,
@@ -151,7 +154,7 @@ class AnswerPageState extends State<AnswerPage> {
                     isBeforeNow
                         ? GestureDetector(
                             onTap: () {
-                              pickAndUploadFile();
+                              pickAndUploadFile(folder: 'tugas');
                             },
                             child: DottedBorder(
                               dashPattern: const [5, 6],

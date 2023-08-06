@@ -182,7 +182,7 @@ class _DashboardState extends State<Dashboard> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: margin),
                     child: FadeAnimation(
-                      offsetX: -100,
+                      // offsetX: -100,
                       childWidget: Text('Kelas',
                           style: Theme.of(context).textTheme.titleLarge),
                     ),
@@ -191,7 +191,7 @@ class _DashboardState extends State<Dashboard> {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: FadeAnimation(
-                      offsetX: 100,
+                      // offsetX: 100,
                       childWidget: Container(
                           width: mediaQueryOfWidth,
                           height: 120,
@@ -318,7 +318,7 @@ class _DashboardState extends State<Dashboard> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         FadeAnimation(
-                          offsetX: -150,
+                          // offsetX: -150,
                           childWidget: Text('Daftar Tugas',
                               style: Theme.of(context).textTheme.titleLarge),
                         ),
@@ -328,7 +328,7 @@ class _DashboardState extends State<Dashboard> {
                   const SizedBox(height: 16),
                   // Refresh.classIsNotEmpty?
                   FadeAnimation(
-                    offsetY: 200,
+                    // offsetY: 200,
                     childWidget: SizedBox(
                       width: double.infinity,
                       height: 280,
@@ -418,7 +418,7 @@ class _DashboardState extends State<Dashboard> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: margin),
       child: FadeAnimation(
-        offsetX: -240,
+        // offsetX: -240,
         childWidget: Row(
           children: [
             CustomButtonClass(

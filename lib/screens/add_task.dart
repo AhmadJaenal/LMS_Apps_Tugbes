@@ -169,7 +169,8 @@ class AddTaskPageState extends State<AddTaskPage> {
                     const SizedBox(height: 24),
                     CustomButton(
                       ontap: () {
-                        if (_formStateTask.currentState!.validate()) {
+                        if (_formStateTask.currentState!.validate() &&
+                            selectedFileName != 'Upload File') {
                           final String codeTask = generateCode(5);
                           addTask(
                             dsc: dscController.text,

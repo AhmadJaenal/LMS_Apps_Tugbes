@@ -6,7 +6,9 @@ import 'package:lms_app_tugbes/services/query_collection.dart';
 
 class PdfView extends StatelessWidget {
   final String fileName;
-  const PdfView({super.key, required this.fileName});
+  final String folderDownload;
+  const PdfView(
+      {super.key, required this.fileName, required this.folderDownload});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class PdfView extends StatelessWidget {
         pageFling: false,
       );
     } else {
-      downloadFile(fileUrl: fileName, folder: 'tugas');
+      downloadFile(fileUrl: fileName, folder: folderDownload);
       return Center(
         child: CircularProgressIndicator(), // Tampilkan indikator loading
       );

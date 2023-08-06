@@ -8,6 +8,7 @@ import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
 import 'package:lms_app_tugbes/widgets/widget_textfield.dart';
 
 import '../shared/theme.dart';
+import '../widgets/widget_pop_up.dart';
 
 class AddModuleTeacher extends StatefulWidget {
   final String titleModule;
@@ -143,7 +144,8 @@ class AddModuleTeacherState extends State<AddModuleTeacher> {
                     const SizedBox(height: 24),
                     CustomButton(
                       ontap: () {
-                        if (_formStateModule.currentState!.validate()) {
+                        if (_formStateModule.currentState!.validate() &&
+                            selectedFileName != 'Upload File') {
                           updateMateri(
                             url: urlController.text,
                             learningCode: widget.learningCode,
@@ -153,6 +155,11 @@ class AddModuleTeacherState extends State<AddModuleTeacher> {
                             nameFile: selectedFileName,
                           );
                           Get.back();
+                        } else {
+                          return ScaffoldMessenger.of(Get.context!)
+                              .showSnackBar(
+                            customSnackbar(message: 'File tidak boleh kosong'),
+                          );
                         }
                       },
                       titleButton: 'Unggah',
