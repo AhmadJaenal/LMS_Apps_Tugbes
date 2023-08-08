@@ -10,12 +10,10 @@ import 'package:lms_app_tugbes/shared/theme.dart';
 import 'package:lms_app_tugbes/widgets/card_class.dart';
 import 'package:lms_app_tugbes/widgets/qr_scanner.dart';
 import 'package:lms_app_tugbes/widgets/qr_widget.dart';
-// import 'package:lms_app_tugbes/widgets/qr_scanner.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
 import 'package:lms_app_tugbes/widgets/widget_pop_up.dart';
 import 'package:lms_app_tugbes/widgets/widget_task.dart';
 
-// import '../widgets/qr_widget.dart';
 import 'list_module.dart';
 
 class Dashboard extends StatefulWidget {
@@ -234,8 +232,7 @@ class _DashboardState extends State<Dashboard> {
                                             builder: (BuildContext context) {
                                               String classCode = classSnapshot
                                                   .docs[index]['code_kelas'];
-                                              String nameClass = classSnapshot
-                                                  .docs[index]['nama_kelas'];
+
                                               return AlertDialog(
                                                 content: Row(
                                                   children: [

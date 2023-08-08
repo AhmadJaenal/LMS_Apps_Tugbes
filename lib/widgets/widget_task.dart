@@ -19,7 +19,20 @@ class CardTask extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TimeRemaining timeRemaining = TimeRemaining();
-    String countdown = timeRemaining.calculateCountdown(timeLine);
+    int minute = timeRemaining.inMinutes(timeLine);
+    double percentage = minute / 120;
+
+    Color colorProgress = Color(0xffFFA500); // Warna default
+
+    if (percentage > 0.7 && percentage <= 1) {
+      colorProgress = Color(0xffFFA500);
+    } else if (percentage > 0.4 && percentage <= 0.69) {
+      colorProgress = Color(0xffFF8C00);
+    } else if (percentage >= 0.1 && percentage <= 0.39) {
+      colorProgress = Color(0xffFF0000);
+    }
+
+    print("percentage ${percentage / 100}");
     return GestureDetector(
       onTap: ontap,
       child: Container(
@@ -75,8 +88,8 @@ class CardTask extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: LinearProgressIndicator(
-                color: yellowColor,
-                value: .9,
+                color: colorProgress,
+                value: 1 - percentage,
                 backgroundColor: secondaryColor.withOpacity(.4),
               ),
             ),

@@ -54,7 +54,6 @@ dependencies:
   youtube_player_flutter: ^8.1.2
   qr_flutter: ^4.1.0
   qr_code_scanner: ^1.0.1
-  youtube_explode_dart: ^2.0.1
 
 flutter_native_splash:
   color: "#FFFFFF"

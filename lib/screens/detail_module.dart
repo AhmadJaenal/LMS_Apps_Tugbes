@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:lms_app_tugbes/services/query_collection.dart';
-import 'package:lms_app_tugbes/screens/pdf_view.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../shared/theme.dart';

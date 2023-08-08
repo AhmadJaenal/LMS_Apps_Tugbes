@@ -7,8 +7,6 @@ import 'package:lms_app_tugbes/screens/detail_module.dart';
 import 'package:lms_app_tugbes/services/query_collection.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
 import 'package:lms_app_tugbes/widgets/widget_textfield.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../shared/theme.dart';
 import '../widgets/widget_pop_up.dart';

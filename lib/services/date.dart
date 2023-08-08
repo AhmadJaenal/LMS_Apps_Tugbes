@@ -36,8 +36,22 @@ class TimeRemaining {
     int days = difference.inDays;
     int hours = difference.inHours.remainder(24);
     int minutes = difference.inMinutes.remainder(60);
-
     return '$days day, $hours hours, $minutes minute';
+  }
+
+  int inMinutes(String targetDateString) {
+    DateFormat dateFormat = DateFormat('dd-MM-yyyy, hh:mm a');
+    DateTime targetDate = dateFormat.parse(targetDateString);
+
+    DateTime currentDate = DateTime.now();
+    Duration difference = targetDate.difference(currentDate);
+
+    int days = difference.inDays;
+    int hours = difference.inHours.remainder(24);
+    int minutes = difference.inMinutes.remainder(60);
+
+    int totalMinutes = ((days * 24) * 60) + (hours * 60) + minutes;
+    return totalMinutes;
   }
 }
 

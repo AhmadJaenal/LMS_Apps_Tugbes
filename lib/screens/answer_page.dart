@@ -9,8 +9,8 @@ import 'package:lms_app_tugbes/screens/page_nilai.dart';
 import 'package:lms_app_tugbes/services/query_collection.dart';
 import 'package:lms_app_tugbes/services/date.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
-import 'package:lms_app_tugbes/screens/pdf_view.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
+import 'package:lms_app_tugbes/widgets/widget_pop_up.dart';
 
 class AnswerPage extends StatefulWidget {
   final String dsc;
@@ -216,12 +216,17 @@ class AnswerPageState extends State<AnswerPage> {
                                 String nis = snapshot.data!['nis'];
                                 return CustomButton(
                                   ontap: () {
-                                    print('diclik');
                                     if (selectedFileName != 'Upload File') {
                                       submitAnAnswer(
                                         nameFile: selectedFileName,
                                         nis: nis,
                                         taskCode: widget.taskCode,
+                                      );
+                                    } else {
+                                      return ScaffoldMessenger.of(Get.context!)
+                                          .showSnackBar(
+                                        customSnackbar(
+                                            message: 'File tidak boleh kosong'),
                                       );
                                     }
                                   },
