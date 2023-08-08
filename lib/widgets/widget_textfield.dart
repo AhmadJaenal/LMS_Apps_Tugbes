@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 
 class CustomTextfield extends StatelessWidget {
@@ -6,18 +7,25 @@ class CustomTextfield extends StatelessWidget {
   final bool obsecured;
   final String titleTextfield;
   final String hintText;
-  const CustomTextfield(
-      {super.key,
-      required this.controller,
-      this.obsecured = false,
-      required this.hintText,
-      required this.titleTextfield});
+  final double width;
+  final bool isNumber;
+  final bool isAssesment;
+  const CustomTextfield({
+    super.key,
+    required this.controller,
+    this.obsecured = false,
+    required this.hintText,
+    required this.titleTextfield,
+    this.width = double.infinity,
+    this.isNumber = false,
+    this.isAssesment = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       // margin: EdgeInsets.symmetric(horizontal: margin),
-      width: double.infinity,
+      width: width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -30,6 +38,10 @@ class CustomTextfield extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           TextFormField(
+            keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(isAssesment ? 4 : 50),
+            ],
             validator: (value) {
               if (value == "") {
                 return "input data correctly";

@@ -1,4 +1,6 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 
 class CustomButton extends StatelessWidget {
@@ -64,6 +66,92 @@ class CustomButtonClass extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
+      ),
+    );
+  }
+}
+
+class ButtonUploadFile extends StatelessWidget {
+  final String selectedFileName;
+  const ButtonUploadFile({super.key, this.selectedFileName = 'Upload File'});
+
+  @override
+  Widget build(BuildContext context) {
+    return DottedBorder(
+      dashPattern: const [5, 6],
+      strokeCap: StrokeCap.round,
+      color: secondaryColor.withOpacity(.4),
+      strokeWidth: 2,
+      borderType: BorderType.RRect,
+      radius: const Radius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        width: double.infinity,
+        height: 42,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Text(
+                  selectedFileName,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        fontSize: 16,
+                        color: secondaryColor,
+                        fontWeight: semiBold,
+                      ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Icon(Icons.add, color: secondaryColor),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ButtonBack extends StatelessWidget {
+  final String title;
+  const ButtonBack({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(margin, 0, margin, 32),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child: Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: blueColor,
+              ),
+              child: Icon(
+                Icons.arrow_back_rounded,
+                color: whiteColor,
+                size: 16,
+              ),
+            ),
+          ),
+          Text(
+            title,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const SizedBox(),
+        ],
       ),
     );
   }

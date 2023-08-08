@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 
 class ModuleCard extends StatefulWidget {
-  final int meetingList;
+  final String chapter;
   final String titleModule;
   final bool isTeacher;
   final bool isClicked;
   final Function() onTap;
   const ModuleCard({
     super.key,
-    required this.meetingList,
+    required this.chapter,
     required this.titleModule,
     this.isTeacher = false,
     required this.onTap,
@@ -46,7 +46,7 @@ class _ModuleCardState extends State<ModuleCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Module ${widget.meetingList}',
+                        widget.chapter,
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             color: secondaryColor, fontWeight: medium),
                       ),
@@ -86,7 +86,7 @@ class _ModuleCardState extends State<ModuleCard> {
                 ],
               )
             : Text(
-                'Module ${widget.meetingList}',
+                'Module ${widget.chapter}',
                 style: Theme.of(context)
                     .textTheme
                     .bodyMedium!

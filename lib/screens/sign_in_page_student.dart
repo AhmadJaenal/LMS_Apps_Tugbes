@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:lms_app_tugbes/animation/fade_animation.dart';
-import 'package:lms_app_tugbes/screens/dashboard_page_student.dart';
-import 'package:lms_app_tugbes/screens/list_class_page.dart';
-import 'package:lms_app_tugbes/screens/profile_page.dart';
+import 'package:lms_app_tugbes/screens/sign_up_page_student.dart';
+import 'package:lms_app_tugbes/services/auth_services.dart';
+import 'package:lms_app_tugbes/services/query_collection.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
-import 'package:lms_app_tugbes/widgets/widget_nav_bar.dart';
+import 'package:lms_app_tugbes/widgets/widget_pop_up.dart';
 import 'package:lms_app_tugbes/widgets/widget_textfield.dart';
 
+import 'sign_in_teacher_page.dart';
+
 class SignInStudent extends StatefulWidget {
-  const SignInStudent({Key? key});
+  const SignInStudent({super.key});
 
   @override
   State<SignInStudent> createState() => _SignInStudentState();
@@ -19,9 +21,16 @@ class SignInStudent extends StatefulWidget {
 
 class _SignInStudentState extends State<SignInStudent>
     with SingleTickerProviderStateMixin {
-  final TextEditingController nisController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final _formState = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +61,12 @@ class _SignInStudentState extends State<SignInStudent>
                         childWidget: Column(
                           children: [
                             Text(
-                              'Welcome back',
+                              'Selamat datang',
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Sign in as a student',
+                              'Masuk sebagai siswa',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
@@ -78,9 +87,9 @@ class _SignInStudentState extends State<SignInStudent>
                         padding: EdgeInsets.symmetric(horizontal: margin),
                         child: FadeAnimation(
                           childWidget: CustomTextfield(
-                            controller: nisController,
-                            titleTextfield: 'NIS',
-                            hintText: 'Enter your NIS',
+                            controller: emailController,
+                            titleTextfield: 'Email',
+                            hintText: 'Masukan email',
                           ),
                         ),
                       ),
@@ -91,7 +100,7 @@ class _SignInStudentState extends State<SignInStudent>
                           childWidget: CustomTextfield(
                             controller: passwordController,
                             titleTextfield: 'Password',
-                            hintText: 'Enter your password',
+                            hintText: 'Masukan password',
                             obsecured: true,
                           ),
                         ),
@@ -105,32 +114,60 @@ class _SignInStudentState extends State<SignInStudent>
                             children: [
                               CustomButton(
                                 width: double.infinity,
-                                titleButton: 'Sign In',
-                                ontap: () {
+                                titleButton: 'Masuk',
+                                ontap: () async {
                                   if (_formState.currentState!.validate()) {
-                                    Get.off(const NavBarMenu(pageOption: [
-                                      DashboardStudent(),
-                                      ListClassPage(),
-                                      ProfilePage()
-                                    ]));
+                                    try {
+                                      final user = await getUser(
+                                        collection: 'siswa',
+                                        email: emailController.text,
+                                      );
+                                      if (user != null) {
+                                        await AuthServices.signIn(
+                                          email: emailController.text,
+                                          password: passwordController.text,
+                                          collection: 'siswa',
+                                          isTeacher: false,
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(Get.context!)
+                                            .showSnackBar(
+                                          customSnackbar(
+                                              message:
+                                                  "Akun tidak ditemukan sebagai siswa"),
+                                        );
+                                      }
+                                    } catch (error) {
+                                      print('Error: $error');
+                                      ScaffoldMessenger.of(Get.context!)
+                                          .showSnackBar(
+                                        customSnackbar(
+                                            message:
+                                                "Terjadi kesalahan saat login"),
+                                      );
+                                    }
                                   }
                                 },
                               ),
                               const SizedBox(height: 24),
                               GestureDetector(
                                 onTap: () {
-                                  Get.offNamed('/signIn-teacher');
+                                  Get.off(
+                                    SignInTeacher(),
+                                    transition: Transition.fade,
+                                    duration: const Duration(seconds: 1),
+                                  );
                                 },
                                 child: RichText(
                                   text: TextSpan(
-                                    text: 'Sign in as a ',
+                                    text: 'Masuk sebagai ',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall!
                                         .copyWith(color: secondaryColor),
                                     children: <TextSpan>[
                                       TextSpan(
-                                        text: 'teacher',
+                                        text: 'Guru',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall!
@@ -143,18 +180,22 @@ class _SignInStudentState extends State<SignInStudent>
                               const SizedBox(height: 8),
                               GestureDetector(
                                 onTap: () {
-                                  Get.offNamed('/signUp-student');
+                                  Get.off(
+                                    SignUpStudent(),
+                                    transition: Transition.fade,
+                                    duration: const Duration(seconds: 1),
+                                  );
                                 },
                                 child: RichText(
                                   text: TextSpan(
-                                    text: "Don't have an account yet? ",
+                                    text: "Belum memiliki akun? ",
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall!
                                         .copyWith(color: secondaryColor),
                                     children: <TextSpan>[
                                       TextSpan(
-                                        text: 'Sign Up',
+                                        text: 'Daftar',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall!
