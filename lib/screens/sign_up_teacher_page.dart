@@ -113,6 +113,7 @@ class _SignUpTeacherState extends State<SignUpTeacher>
                             ),
                           ),
                         ),
+                        const SizedBox(height: 24),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: margin),
                           child: FadeAnimation(
@@ -123,7 +124,6 @@ class _SignUpTeacherState extends State<SignUpTeacher>
                             ),
                           ),
                         ),
-                        const SizedBox(height: 24),
                         const SizedBox(height: 24),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: margin),
