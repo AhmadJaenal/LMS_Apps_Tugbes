@@ -127,17 +127,24 @@ class AnswerPageState extends State<AnswerPage> {
                                 .copyWith(color: redColor),
                           )
                         : const SizedBox(),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 8),
+                    Text(
+                      'File Tugas',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    const SizedBox(height: 4),
                     Row(
                       children: [
                         SvgPicture.asset('assets/pdf.svg', width: 24),
                         const SizedBox(width: 16),
                         GestureDetector(
                           onTap: () {
-                            Get.to(PdfView(
-                              fileName: widget.fileName,
-                              folderDownload: 'tugas',
-                            ));
+                            // Get.to(PdfView(
+                            //   fileName: widget.fileName,
+                            //   folderDownload: 'tugas',
+                            // ));
+                            downloadFile(
+                                fileUrl: widget.fileName, folder: 'tugas');
                           },
                           child: SizedBox(
                             width: 250,

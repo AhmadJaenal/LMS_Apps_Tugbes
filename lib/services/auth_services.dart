@@ -36,7 +36,7 @@ class AuthServices {
               ),
               ListClassPage(
                   email: email, collection: collection, isTeacher: isTeacher),
-              ProfilePage(email: email),
+              ProfilePage(email: email, isTeacher: isTeacher),
             ],
           ),
           transition: Transition.fade,
@@ -58,8 +58,9 @@ class AuthServices {
       if (e.code == 'email-already-in-use') {
         errorMessage = 'Email ini sudah tersedia';
       }
+      print("error firebase: ${e.code}");
       ScaffoldMessenger.of(Get.context!).showSnackBar(
-        customSnackbar(message: e.toString()),
+        customSnackbar(message: errorMessage.toString()),
       );
     } catch (e) {
       return null;
@@ -83,7 +84,7 @@ class AuthServices {
             ),
             ListClassPage(
                 email: email, collection: collection, isTeacher: isTeacher),
-            ProfilePage(email: email),
+            ProfilePage(email: email, isTeacher: isTeacher),
           ],
         ),
         transition: Transition.fade,

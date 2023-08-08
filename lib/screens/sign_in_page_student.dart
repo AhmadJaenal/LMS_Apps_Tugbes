@@ -4,8 +4,10 @@ import 'package:get/get.dart';
 import 'package:lms_app_tugbes/animation/fade_animation.dart';
 import 'package:lms_app_tugbes/screens/sign_up_page_student.dart';
 import 'package:lms_app_tugbes/services/auth_services.dart';
+import 'package:lms_app_tugbes/services/query_collection.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
+import 'package:lms_app_tugbes/widgets/widget_pop_up.dart';
 import 'package:lms_app_tugbes/widgets/widget_textfield.dart';
 
 import 'sign_in_teacher_page.dart';
@@ -112,15 +114,38 @@ class _SignInStudentState extends State<SignInStudent>
                             children: [
                               CustomButton(
                                 width: double.infinity,
-                                titleButton: 'Sign In',
+                                titleButton: 'Masuk',
                                 ontap: () async {
                                   if (_formState.currentState!.validate()) {
-                                    AuthServices.signIn(
-                                      email: emailController.text,
-                                      password: passwordController.text,
-                                      collection: 'siswa',
-                                      isTeacher: false,
-                                    );
+                                    try {
+                                      final user = await getUser(
+                                        collection: 'siswa',
+                                        email: emailController.text,
+                                      );
+                                      if (user != null) {
+                                        await AuthServices.signIn(
+                                          email: emailController.text,
+                                          password: passwordController.text,
+                                          collection: 'siswa',
+                                          isTeacher: false,
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(Get.context!)
+                                            .showSnackBar(
+                                          customSnackbar(
+                                              message:
+                                                  "Akun tidak ditemukan sebagai siswa"),
+                                        );
+                                      }
+                                    } catch (error) {
+                                      print('Error: $error');
+                                      ScaffoldMessenger.of(Get.context!)
+                                          .showSnackBar(
+                                        customSnackbar(
+                                            message:
+                                                "Terjadi kesalahan saat login"),
+                                      );
+                                    }
                                   }
                                 },
                               ),

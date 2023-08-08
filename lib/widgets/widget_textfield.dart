@@ -9,6 +9,8 @@ class CustomTextfield extends StatelessWidget {
   final String titleTextfield;
   final String hintText;
   final double width;
+  final bool isNumber;
+  final bool isAssesment;
   const CustomTextfield({
     super.key,
     required this.controller,
@@ -16,6 +18,8 @@ class CustomTextfield extends StatelessWidget {
     required this.hintText,
     required this.titleTextfield,
     this.width = double.infinity,
+    this.isNumber = false,
+    this.isAssesment = false,
   });
 
   @override
@@ -35,8 +39,9 @@ class CustomTextfield extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           TextFormField(
+            keyboardType: isNumber ? TextInputType.number : TextInputType.text,
             inputFormatters: [
-              LengthLimitingTextInputFormatter(50),
+              LengthLimitingTextInputFormatter(isAssesment ? 4 : 50),
             ],
             validator: (value) {
               if (value == "") {
@@ -76,80 +81,80 @@ class CustomTextfield extends StatelessWidget {
   }
 }
 
-class TextFieldOnChange extends StatelessWidget {
-  final TextEditingController controller;
-  final double width;
-  final String taskCode;
-  final String nis;
-  final String fileName;
-  const TextFieldOnChange({
-    super.key,
-    required this.controller,
-    this.width = double.infinity,
-    required this.taskCode,
-    required this.nis,
-    required this.fileName,
-  });
+// class TextFieldOnChange extends StatelessWidget {
+//   final TextEditingController controller;
+//   final double width;
+//   final String taskCode;
+//   final String nis;
+//   final String fileName;
+//   const TextFieldOnChange({
+//     super.key,
+//     required this.controller,
+//     this.width = double.infinity,
+//     required this.taskCode,
+//     required this.nis,
+//     required this.fileName,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      // margin: EdgeInsets.symmetric(horizontal: margin),
-      width: width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextFormField(
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(2),
-            ],
-            keyboardType: TextInputType.number,
-            onChanged: (value) {
-              assessment(
-                grade: controller.text,
-                nis: nis,
-                taskCode: taskCode,
-                fileName: fileName,
-              );
-              daftarNilai(
-                nis: nis,
-                taskCode: taskCode,
-                grade: controller.text,
-              );
-            },
-            validator: (value) {
-              if (value == "") {
-                return "Data tidak boleh kosong";
-              }
-            },
-            controller: controller,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: secondaryColor.withOpacity(.2), width: 2.0),
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: redColor.withOpacity(.7), width: 2.0),
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: secondaryColor.withOpacity(.4), width: 2.0),
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(color: blueColor, width: 2.0),
-              ),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            ),
-            cursorColor: primaryColor,
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       // margin: EdgeInsets.symmetric(horizontal: margin),
+//       width: width,
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           TextFormField(
+//             inputFormatters: [
+//               LengthLimitingTextInputFormatter(2),
+//             ],
+//             keyboardType: TextInputType.number,
+//             onChanged: (value) {
+//               assessment(
+//                 grade: controller.text,
+//                 nis: nis,
+//                 taskCode: taskCode,
+//                 fileName: fileName,
+//               );
+//               daftarNilai(
+//                 nis: nis,
+//                 taskCode: taskCode,
+//                 grade: controller.text,
+//               );
+//             },
+//             validator: (value) {
+//               if (value == "") {
+//                 return "Data tidak boleh kosong";
+//               }
+//             },
+//             controller: controller,
+//             decoration: InputDecoration(
+//               border: OutlineInputBorder(
+//                 borderSide: BorderSide(
+//                     color: secondaryColor.withOpacity(.2), width: 2.0),
+//                 borderRadius: BorderRadius.circular(10.0),
+//               ),
+//               errorBorder: OutlineInputBorder(
+//                 borderSide:
+//                     BorderSide(color: redColor.withOpacity(.7), width: 2.0),
+//                 borderRadius: BorderRadius.circular(10.0),
+//               ),
+//               enabledBorder: OutlineInputBorder(
+//                 borderSide: BorderSide(
+//                     color: secondaryColor.withOpacity(.4), width: 2.0),
+//                 borderRadius: BorderRadius.circular(10.0),
+//               ),
+//               focusedBorder: OutlineInputBorder(
+//                 borderRadius: BorderRadius.circular(10.0),
+//                 borderSide: BorderSide(color: blueColor, width: 2.0),
+//               ),
+//               contentPadding:
+//                   const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+//             ),
+//             cursorColor: primaryColor,
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

@@ -3,9 +3,12 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lms_app_tugbes/screens/detail_module.dart';
 import 'package:lms_app_tugbes/services/query_collection.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
 import 'package:lms_app_tugbes/widgets/widget_textfield.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../shared/theme.dart';
 import '../widgets/widget_pop_up.dart';
@@ -54,6 +57,7 @@ class AddModuleTeacherState extends State<AddModuleTeacher> {
     }
   }
 
+  bool isValid = false;
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
@@ -109,6 +113,29 @@ class AddModuleTeacherState extends State<AddModuleTeacher> {
                 titleTextfield: 'Url',
                 hintText: 'Link youtube sebagai referensi (optional)',
               ),
+              const SizedBox(height: 16),
+              isValid
+                  ? Container(
+                      width: double.infinity,
+                      height: 170,
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: primaryColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: YTPlayer(url: urlController.text))
+                  : const SizedBox(),
+              const SizedBox(height: 16),
+              CustomButton(
+                  titleButton: 'Cek vidio',
+                  ontap: () {
+                    setState(() {
+                      if (urlController.text.isNotEmpty) {
+                        isValid = !isValid;
+                        print(isValid);
+                      }
+                    });
+                  }),
               const SizedBox(height: 16),
               Form(
                 key: _formStateModule,

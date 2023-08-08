@@ -41,13 +41,13 @@ void dispose() {
 }
 
 class _DetailModuleState extends State<DetailModule> {
-  YoutubePlayerController ytController = YoutubePlayerController(
-    initialVideoId: '45hGjT2xOA8',
-    flags: YoutubePlayerFlags(
-      autoPlay: true,
-      mute: true,
-    ),
-  );
+  // YoutubePlayerController ytController = YoutubePlayerController(
+  //   initialVideoId: '45hGjT2xOA8',
+  //   flags: YoutubePlayerFlags(
+  //     autoPlay: true,
+  //     mute: true,
+  //   ),
+  // );
   bool isDownload = false;
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,10 +126,11 @@ class _DetailModuleState extends State<DetailModule> {
                 const SizedBox(width: 16),
                 GestureDetector(
                   onTap: () {
-                    Get.to(PdfView(
-                      fileName: widget.fileName,
-                      folderDownload: 'materi',
-                    ));
+                    // Get.to(PdfView(
+                    //   fileName: widget.fileName,
+                    //   folderDownload: 'materi',
+                    // ));
+                    downloadFile(fileUrl: widget.fileName, folder: 'tugas');
                   },
                   child: SizedBox(
                     width: 250,
@@ -160,7 +161,7 @@ class _DetailModuleState extends State<DetailModule> {
                   height: 400,
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
-                    color: primaryColor,
+                    color: whiteColor,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: YTPlayer(url: widget.url),
@@ -185,34 +186,42 @@ class YTPlayer extends StatefulWidget {
 class _YTPlayerState extends State<YTPlayer> {
   late YoutubePlayerController _controller;
   bool isFullScreen = false;
+  bool _isControllerInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = YoutubePlayerController(
-      initialVideoId: YoutubePlayer.convertUrlToId(widget.url)!,
-      flags: const YoutubePlayerFlags(
-        mute: false,
-        autoPlay: false,
-        loop: false,
-        isLive: false, // Tambahkan baris ini jika diperlukan
-      ),
-    );
+    try {
+      _controller = YoutubePlayerController(
+        initialVideoId: YoutubePlayer.convertUrlToId(widget.url)!,
+        flags: const YoutubePlayerFlags(
+          mute: false,
+          autoPlay: false,
+          loop: false,
+          isLive: false,
+        ),
+      );
 
-    _controller.addListener(() {
-      if (_controller.value.isFullScreen) {
-        SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-        setState(() {
-          isFullScreen = true;
-        });
-      } else {
-        SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
-            overlays: []);
-        setState(() {
-          isFullScreen = false;
-        });
-      }
-    });
+      _controller.addListener(() {
+        if (_controller.value.isFullScreen) {
+          SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+              overlays: []);
+          setState(() {
+            isFullScreen = true;
+          });
+        } else {
+          SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
+              overlays: []);
+          setState(() {
+            isFullScreen = false;
+          });
+        }
+      });
+
+      _isControllerInitialized = true;
+    } catch (e) {
+      _isControllerInitialized = false;
+    }
   }
 
   @override
@@ -223,25 +232,41 @@ class _YTPlayerState extends State<YTPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (isFullScreen) {
-          _controller.toggleFullScreenMode();
-          return false;
-        }
-        return true;
-      },
-      child: Scaffold(
-        body: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: YoutubePlayer(
-            controller: _controller,
-            showVideoProgressIndicator: true,
-            progressIndicatorColor: primaryColor,
-            progressColors: ProgressBarColors(backgroundColor: Colors.grey),
+    if (_isControllerInitialized) {
+      return WillPopScope(
+        onWillPop: () async {
+          if (isFullScreen) {
+            _controller.toggleFullScreenMode();
+            return false;
+          }
+          return true;
+        },
+        child: Scaffold(
+          body: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: YoutubePlayer(
+              controller: _controller,
+              showVideoProgressIndicator: true,
+              progressIndicatorColor: primaryColor,
+              progressColors: ProgressBarColors(backgroundColor: Colors.grey),
+            ),
           ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            children: [
+              SvgPicture.asset('assets/error.svg', width: 200),
+              Text(
+                'Vidio tidak ditemukan',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
   }
 }

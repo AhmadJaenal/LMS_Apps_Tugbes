@@ -101,6 +101,7 @@ class _SignUpStudentState extends State<SignUpStudent>
                               controller: nisController,
                               titleTextfield: 'NIS',
                               hintText: 'Masukan NIS',
+                              isNumber: true,
                             ),
                           ),
                         ),

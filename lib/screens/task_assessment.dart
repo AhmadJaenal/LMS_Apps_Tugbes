@@ -19,7 +19,7 @@ class TaskAssessment extends StatelessWidget {
   });
   final TextEditingController gradeController = TextEditingController();
   // final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
-
+  final _formStateTask = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,10 +48,11 @@ class TaskAssessment extends StatelessWidget {
                     const SizedBox(width: 16),
                     GestureDetector(
                       onTap: () {
-                        Get.to(PdfView(
-                          fileName: fileName,
-                          folderDownload: 'tugas',
-                        ));
+                        // Get.to(PdfView(
+                        //   fileName: fileName,
+                        //   folderDownload: 'tugas',
+                        // ));
+                        downloadFile(fileUrl: fileName, folder: 'tugas');
                       },
                       child: SizedBox(
                         width: 250,
@@ -64,13 +65,36 @@ class TaskAssessment extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                TextFieldOnChange(
-                  controller: gradeController,
-                  fileName: fileName,
-                  nis: nis,
-                  taskCode: taskCode,
+                Form(
+                  key: _formStateTask,
+                  autovalidateMode: AutovalidateMode.always,
+                  child: CustomTextfield(
+                    controller: gradeController,
+                    hintText: 'Masukan nilai',
+                    titleTextfield: '',
+                    isNumber: true,
+                    isAssesment: true,
+                  ),
                 ),
+                const SizedBox(height: 16),
+                CustomButton(
+                  titleButton: 'Submit',
+                  ontap: () {
+                    if (_formStateTask.currentState!.validate()) {
+                      assessment(
+                        grade: gradeController.text,
+                        nis: nis,
+                        taskCode: taskCode,
+                        fileName: fileName,
+                      );
+                      daftarNilai(
+                        nis: nis,
+                        taskCode: taskCode,
+                        grade: gradeController.text,
+                      );
+                    }
+                  },
+                )
               ],
             ),
           ),

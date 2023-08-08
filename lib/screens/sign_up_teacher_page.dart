@@ -106,6 +106,17 @@ class _SignUpTeacherState extends State<SignUpTeacher>
                           padding: EdgeInsets.symmetric(horizontal: margin),
                           child: FadeAnimation(
                             childWidget: CustomTextfield(
+                              controller: nipController,
+                              titleTextfield: 'NIP',
+                              hintText: 'Masukan NIP',
+                              isNumber: true,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: margin),
+                          child: FadeAnimation(
+                            childWidget: CustomTextfield(
                               controller: nameController,
                               titleTextfield: 'Nama',
                               hintText: 'Masukan nama',
@@ -113,16 +124,6 @@ class _SignUpTeacherState extends State<SignUpTeacher>
                           ),
                         ),
                         const SizedBox(height: 24),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: margin),
-                          child: FadeAnimation(
-                            childWidget: CustomTextfield(
-                              controller: nipController,
-                              titleTextfield: 'NIP',
-                              hintText: 'Masukan NIP',
-                            ),
-                          ),
-                        ),
                         const SizedBox(height: 24),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: margin),

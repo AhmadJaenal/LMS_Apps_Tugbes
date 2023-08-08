@@ -135,9 +135,9 @@ Future<void> downloadFile({String? fileUrl, folder}) async {
         await storageRef.child("$folder/$fileUrl").getDownloadURL();
     await FileDownloader.downloadFile(
       url: downloadUrl,
-      // onDownloadCompleted: (path) {
-      //   Get.to(PdfView(fileName: fileUrl!));
-      // },
+      onDownloadCompleted: (path) {
+        Get.to(PdfView(fileName: fileUrl!, folderDownload: folder));
+      },
       name: fileUrl,
     );
 

@@ -8,6 +8,8 @@ import 'package:lms_app_tugbes/screens/answer_page.dart';
 import 'package:lms_app_tugbes/services/query_collection.dart';
 import 'package:lms_app_tugbes/shared/theme.dart';
 import 'package:lms_app_tugbes/widgets/card_class.dart';
+import 'package:lms_app_tugbes/widgets/qr_scanner.dart';
+import 'package:lms_app_tugbes/widgets/qr_widget.dart';
 // import 'package:lms_app_tugbes/widgets/qr_scanner.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
 import 'package:lms_app_tugbes/widgets/widget_pop_up.dart';
@@ -251,21 +253,21 @@ class _DashboardState extends State<Dashboard> {
                                                           .bodyLarge,
                                                     ),
                                                     const SizedBox(width: 8),
-                                                    // GestureDetector(
-                                                    //     onTap: () {
-                                                    //       showDialog(
-                                                    //         context: context,
-                                                    //         builder: (context) {
-                                                    //           return AlertDialog(
-                                                    //             content: QRCode(
-                                                    //                 code:
-                                                    //                     classCode),
-                                                    //           );
-                                                    //         },
-                                                    //       );
-                                                    //     },
-                                                    //     child: Icon(
-                                                    //         Icons.qr_code)),
+                                                    GestureDetector(
+                                                        onTap: () {
+                                                          showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return AlertDialog(
+                                                                content: QRCode(
+                                                                    code:
+                                                                        classCode),
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                        child: Icon(
+                                                            Icons.qr_code)),
                                                   ],
                                                 ),
                                               );
@@ -490,29 +492,29 @@ class _DashboardState extends State<Dashboard> {
               titleButton: 'Bergabung ke kelas',
             ),
             const SizedBox(width: 8),
-            // FutureBuilder(
-            //   future:
-            //       getUser(collection: widget.collection, email: widget.email),
-            //   builder: (context, snapshot) {
-            //     return GestureDetector(
-            //         onTap: () {
-            //           if (snapshot.hasData) {
-            //             showDialog(
-            //               context: context,
-            //               builder: (BuildContext context) {
-            //                 return QRScanner(
-            //                   nis: snapshot.data!['nis'],
-            //                   email: widget.email,
-            //                 );
-            //               },
-            //             );
-            //           } else {
-            //             Text('Terdapat Error');
-            //           }
-            //         },
-            //         child: Icon(Icons.qr_code_scanner_outlined));
-            //   },
-            // ),
+            FutureBuilder(
+              future:
+                  getUser(collection: widget.collection, email: widget.email),
+              builder: (context, snapshot) {
+                return GestureDetector(
+                    onTap: () {
+                      if (snapshot.hasData) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return QRScanner(
+                              nis: snapshot.data!['nis'],
+                              email: widget.email,
+                            );
+                          },
+                        );
+                      } else {
+                        Text('Terdapat Error');
+                      }
+                    },
+                    child: Icon(Icons.qr_code_scanner_outlined));
+              },
+            ),
           ],
         ),
       ),

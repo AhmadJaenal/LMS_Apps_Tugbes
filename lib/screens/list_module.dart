@@ -147,7 +147,7 @@ class ListModule extends StatelessWidget {
                     ontap: () {
                       Get.to(AddModuleTeacher(learningCode: learningCode));
                     },
-                    titleButton: 'Add Module',
+                    titleButton: 'Materi',
                   ),
                   const SizedBox(width: 8),
                   CustomButton(
@@ -157,7 +157,7 @@ class ListModule extends StatelessWidget {
                         classCode: classCode,
                       ));
                     },
-                    titleButton: 'Add Task',
+                    titleButton: 'Tugas',
                   ),
                 ],
               ),

@@ -35,7 +35,7 @@ class ListClassPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Center(
               child: Text(
-                'Your Class',
+                'Daftar Kelas',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),

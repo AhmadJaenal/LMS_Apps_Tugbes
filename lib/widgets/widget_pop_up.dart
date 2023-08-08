@@ -138,31 +138,22 @@ class CustomPopUpNotif extends StatelessWidget {
               const SizedBox(height: 32),
               SvgPicture.asset('assets/$icon'),
               const SizedBox(height: 32),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CustomButton(
-                    titleButton: 'Go',
-                    ontap: ontap,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: SizedBox(
-                      width: 100,
-                      child: Center(
-                        child: Text(
-                          'Close',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(color: secondaryColor, fontSize: 16),
-                        ),
-                      ),
+              GestureDetector(
+                onTap: () {
+                  Get.back();
+                },
+                child: SizedBox(
+                  width: 100,
+                  child: Center(
+                    child: Text(
+                      'Close',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(color: secondaryColor, fontSize: 16),
                     ),
                   ),
-                ],
+                ),
               ),
             ],
           ),

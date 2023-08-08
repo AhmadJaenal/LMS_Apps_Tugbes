@@ -7,7 +7,8 @@ import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
 
 class ProfilePage extends StatelessWidget {
   final String email;
-  const ProfilePage({super.key, required this.email});
+  final bool isTeacher;
+  const ProfilePage({super.key, required this.email, this.isTeacher = false});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,8 @@ class ProfilePage extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             FutureBuilder(
-              future: getUser(collection: 'siswa', email: email),
+              future: getUser(
+                  collection: isTeacher ? 'guru' : 'siswa', email: email),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Column(
@@ -39,7 +41,9 @@ class ProfilePage extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        snapshot.data!['nis'],
+                        isTeacher
+                            ? snapshot.data!['nip']
+                            : snapshot.data!['nis'],
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],

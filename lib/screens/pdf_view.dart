@@ -4,16 +4,21 @@ import 'dart:io';
 
 import 'package:lms_app_tugbes/services/query_collection.dart';
 
-class PdfView extends StatelessWidget {
+class PdfView extends StatefulWidget {
   final String fileName;
   final String folderDownload;
   const PdfView(
       {super.key, required this.fileName, required this.folderDownload});
 
   @override
-  Widget build(BuildContext context) {
-    String filePath = 'storage/emulated/0/Download/$fileName';
+  State<PdfView> createState() => _PdfViewState();
+}
 
+class _PdfViewState extends State<PdfView> {
+  @override
+  Widget build(BuildContext context) {
+    String filePath = 'storage/emulated/0/Download/${widget.fileName}';
+    print(filePath);
     File file = File(filePath);
 
     if (file.existsSync()) {
@@ -25,9 +30,10 @@ class PdfView extends StatelessWidget {
         pageFling: false,
       );
     } else {
-      downloadFile(fileUrl: fileName, folder: folderDownload);
-      return Center(
-        child: CircularProgressIndicator(), // Tampilkan indikator loading
+      downloadFile(fileUrl: widget.fileName, folder: widget.folderDownload);
+      setState(() {});
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator()),
       );
     }
   }

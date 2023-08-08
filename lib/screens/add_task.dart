@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:lms_app_tugbes/services/query_collection.dart';
 import 'package:lms_app_tugbes/services/date.dart';
 import 'package:lms_app_tugbes/widgets/widget_custom_button.dart';
+import 'package:lms_app_tugbes/widgets/widget_pop_up.dart';
 import 'package:lms_app_tugbes/widgets/widget_textfield.dart';
 
 import '../shared/theme.dart';
@@ -66,7 +67,7 @@ class AddTaskPageState extends State<AddTaskPage> {
     }
   }
 
-  late String dateResult;
+  String dateResult = '';
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +100,7 @@ class AddTaskPageState extends State<AddTaskPage> {
                   ),
                   widget.titleModule == ""
                       ? Text(
-                          "Task",
+                          "Tugas",
                           style: Theme.of(context).textTheme.titleLarge,
                         )
                       : Text(
@@ -144,8 +145,10 @@ class AddTaskPageState extends State<AddTaskPage> {
                                 Tanggal.month;
                                 Tanggal.year;
                               });
-                              dateResult =
-                                  "${Tanggal.day.toString()}-${Tanggal.month.toString()}-${Tanggal.year.toString()}, ${_timeOfDay.format(context).toString()}";
+                              setState(() {
+                                dateResult =
+                                    "${Tanggal.day.toString()}-${Tanggal.month.toString()}-${Tanggal.year.toString()}, ${_timeOfDay.format(context).toString()}";
+                              });
                             });
                           },
                           child: Text(
@@ -170,7 +173,8 @@ class AddTaskPageState extends State<AddTaskPage> {
                     CustomButton(
                       ontap: () {
                         if (_formStateTask.currentState!.validate() &&
-                            selectedFileName != 'Upload File') {
+                            selectedFileName != 'Upload File' &&
+                            dateResult != '') {
                           final String codeTask = generateCode(5);
                           addTask(
                             dsc: dscController.text,
@@ -180,6 +184,11 @@ class AddTaskPageState extends State<AddTaskPage> {
                             fileName: selectedFileName,
                           );
                           Get.back();
+                        } else {
+                          ScaffoldMessenger.of(Get.context!).showSnackBar(
+                            customSnackbar(
+                                message: 'Isi data dengan file yang benar'),
+                          );
                         }
                       },
                       titleButton: 'Upload',
