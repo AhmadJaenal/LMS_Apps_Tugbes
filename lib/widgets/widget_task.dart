@@ -22,7 +22,7 @@ class CardTask extends StatelessWidget {
     int minute = timeRemaining.inMinutes(timeLine);
     double percentage = minute / 120;
 
-    Color colorProgress = Color(0xffFFA500); // Warna default
+    Color colorProgress = Color(0xffFF0000); // Warna default
 
     if (percentage > 0.7 && percentage <= 1) {
       colorProgress = Color(0xffFFA500);

@@ -80,7 +80,7 @@ class _SignUpTeacherState extends State<SignUpTeacher>
                           offsetY: -100,
                           childWidget: Column(
                             children: [
-                              Text('Selamt datang',
+                              Text('Selamat datang',
                                   style:
                                       Theme.of(context).textTheme.titleLarge),
                               const SizedBox(height: 8),
@@ -206,7 +206,7 @@ class _SignUpTeacherState extends State<SignUpTeacher>
                                     .copyWith(color: secondaryColor),
                                 children: <TextSpan>[
                                   TextSpan(
-                                    text: 'student',
+                                    text: 'siswa',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall!
