@@ -41,6 +41,9 @@ class CustomTextfield extends StatelessWidget {
             keyboardType: isNumber ? TextInputType.number : TextInputType.text,
             inputFormatters: [
               LengthLimitingTextInputFormatter(isAssesment ? 4 : 50),
+              isNumber
+                  ? FilteringTextInputFormatter.digitsOnly
+                  : FilteringTextInputFormatter.singleLineFormatter,
             ],
             validator: (value) {
               if (value == "") {
